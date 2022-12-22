@@ -15,6 +15,8 @@
 		E6625AEB295466E00052864C /* StravatarUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6625AEA295466E00052864C /* StravatarUITestsLaunchTests.swift */; };
 		E6625AF9295467600052864C /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = E6625AF8295467600052864C /* ComposableArchitecture */; };
 		E6625AFB295467600052864C /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = E6625AFA295467600052864C /* Dependencies */; };
+		E6625AFF295467EB0052864C /* HomeLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6625AFD295467EA0052864C /* HomeLogic.swift */; };
+		E6625B00295467EB0052864C /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6625AFE295467EA0052864C /* HomeScreen.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +47,8 @@
 		E6625AE4295466E00052864C /* StravatarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StravatarUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6625AE8295466E00052864C /* StravatarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravatarUITests.swift; sourceTree = "<group>"; };
 		E6625AEA295466E00052864C /* StravatarUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravatarUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		E6625AFD295467EA0052864C /* HomeLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeLogic.swift; sourceTree = "<group>"; };
+		E6625AFE295467EA0052864C /* HomeScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +101,7 @@
 		E6625ACB295466DE0052864C /* Stravatar */ = {
 			isa = PBXGroup;
 			children = (
+				E6625AFC295467D60052864C /* Home */,
 				E6625ACC295466DE0052864C /* StravatarApp.swift */,
 				E6625AD0295466DF0052864C /* Assets.xcassets */,
 				E6625AD2295466DF0052864C /* Stravatar.entitlements */,
@@ -128,6 +133,15 @@
 				E6625AEA295466E00052864C /* StravatarUITestsLaunchTests.swift */,
 			);
 			path = StravatarUITests;
+			sourceTree = "<group>";
+		};
+		E6625AFC295467D60052864C /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				E6625AFD295467EA0052864C /* HomeLogic.swift */,
+				E6625AFE295467EA0052864C /* HomeScreen.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -268,6 +282,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E6625ACD295466DE0052864C /* StravatarApp.swift in Sources */,
+				E6625AFF295467EB0052864C /* HomeLogic.swift in Sources */,
+				E6625B00295467EB0052864C /* HomeScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

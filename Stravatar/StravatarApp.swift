@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 @main
 struct StravatarApp: App {
+    let store = Store(
+        initialState: Home.State(),
+        reducer: Home())
     var body: some Scene {
         WindowGroup {
-            
+            HomeScreen(store: self.store)
         }
     }
 }
