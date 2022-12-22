@@ -11,7 +11,7 @@ import SwiftUI
 struct StravatarApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            
         }
     }
 }
