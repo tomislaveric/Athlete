@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E6062A492954D0DC0078AAB9 /* HTTPRequest in Frameworks */ = {isa = PBXBuildFile; productRef = E6062A482954D0DC0078AAB9 /* HTTPRequest */; };
 		E6625ACD295466DE0052864C /* StravatarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6625ACC295466DE0052864C /* StravatarApp.swift */; };
 		E6625AD1295466DF0052864C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E6625AD0295466DF0052864C /* Assets.xcassets */; };
 		E6625AD5295466DF0052864C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E6625AD4295466DF0052864C /* Preview Assets.xcassets */; };
@@ -17,6 +18,7 @@
 		E6625AFB295467600052864C /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = E6625AFA295467600052864C /* Dependencies */; };
 		E6625AFF295467EB0052864C /* HomeLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6625AFD295467EA0052864C /* HomeLogic.swift */; };
 		E6625B00295467EB0052864C /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6625AFE295467EA0052864C /* HomeScreen.swift */; };
+		E6625B022954832D0052864C /* TCA+Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6625B012954832D0052864C /* TCA+Dependencies.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,7 @@
 		E6625AEA295466E00052864C /* StravatarUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravatarUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E6625AFD295467EA0052864C /* HomeLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeLogic.swift; sourceTree = "<group>"; };
 		E6625AFE295467EA0052864C /* HomeScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
+		E6625B012954832D0052864C /* TCA+Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCA+Dependencies.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,7 @@
 			files = (
 				E6625AF9295467600052864C /* ComposableArchitecture in Frameworks */,
 				E6625AFB295467600052864C /* Dependencies in Frameworks */,
+				E6062A492954D0DC0078AAB9 /* HTTPRequest in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,6 +110,7 @@
 				E6625AD0295466DF0052864C /* Assets.xcassets */,
 				E6625AD2295466DF0052864C /* Stravatar.entitlements */,
 				E6625AD3295466DF0052864C /* Preview Content */,
+				E6625B012954832D0052864C /* TCA+Dependencies.swift */,
 			);
 			path = Stravatar;
 			sourceTree = "<group>";
@@ -163,6 +168,7 @@
 			packageProductDependencies = (
 				E6625AF8295467600052864C /* ComposableArchitecture */,
 				E6625AFA295467600052864C /* Dependencies */,
+				E6062A482954D0DC0078AAB9 /* HTTPRequest */,
 			);
 			productName = Stravatar;
 			productReference = E6625AC9295466DE0052864C /* Stravatar.app */;
@@ -238,6 +244,7 @@
 			mainGroup = E6625AC0295466DE0052864C;
 			packageReferences = (
 				E6625AF7295467600052864C /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				E6062A472954D0DC0078AAB9 /* XCRemoteSwiftPackageReference "HTTPRequest" */,
 			);
 			productRefGroup = E6625ACA295466DE0052864C /* Products */;
 			projectDirPath = "";
@@ -284,6 +291,7 @@
 				E6625ACD295466DE0052864C /* StravatarApp.swift in Sources */,
 				E6625AFF295467EB0052864C /* HomeLogic.swift in Sources */,
 				E6625B00295467EB0052864C /* HomeScreen.swift in Sources */,
+				E6625B022954832D0052864C /* TCA+Dependencies.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,6 +362,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -412,6 +421,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_APP_SANDBOX = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -637,6 +647,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		E6062A472954D0DC0078AAB9 /* XCRemoteSwiftPackageReference "HTTPRequest" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tomislaveric/HTTPRequest";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		E6625AF7295467600052864C /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
@@ -648,6 +666,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E6062A482954D0DC0078AAB9 /* HTTPRequest */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E6062A472954D0DC0078AAB9 /* XCRemoteSwiftPackageReference "HTTPRequest" */;
+			productName = HTTPRequest;
+		};
 		E6625AF8295467600052864C /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E6625AF7295467600052864C /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
