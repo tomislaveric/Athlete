@@ -7,17 +7,17 @@
 
 import Foundation
 import ComposableArchitecture
-import HTTPRequest
+import StravaApi
 
 extension DependencyValues {
-    private enum HTTPRequestKey: DependencyKey {
-        typealias Value = HTTPRequest
+    private enum StravaApiKey: DependencyKey {
+        typealias Value = StravaApi
         
-        static let liveValue: HTTPRequest = HTTPRequestImpl()
+        static let liveValue: StravaApi = StravaApiImpl(token: "")
     }
     
-    var httpRequest: HTTPRequest {
-        get { self[HTTPRequestKey.self] }
-        set { self[HTTPRequestKey.self] = newValue }
+    var stravaApi: StravaApi {
+        get { self[StravaApiKey.self] }
+        set { self[StravaApiKey.self] = newValue }
     }
 }

@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "stravaapi",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tomislaveric/StravaApi",
+      "state" : {
+        "branch" : "main",
+        "revision" : "3e9b0db6ce52c455f1d9044b521cd95a9c59875e"
+      }
+    },
+    {
       "identity" : "swift-case-paths",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-case-paths",
