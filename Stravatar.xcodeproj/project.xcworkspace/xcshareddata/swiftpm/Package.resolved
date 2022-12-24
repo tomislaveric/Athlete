@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "httprequest",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tomislaveric/HTTPRequest",
+      "state" : {
+        "branch" : "main",
+        "revision" : "67956a7f76e2ecd99784352b0911e1ac6d7926dc"
+      }
+    },
+    {
       "identity" : "swift-case-paths",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-case-paths",
