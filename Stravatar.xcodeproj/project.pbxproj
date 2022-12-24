@@ -52,6 +52,7 @@
 		E6625AFD295467EA0052864C /* HomeLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeLogic.swift; sourceTree = "<group>"; };
 		E6625AFE295467EA0052864C /* HomeScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		E6625B012954832D0052864C /* TCA+Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCA+Dependencies.swift"; sourceTree = "<group>"; };
+		E6C7FD332957A2A000830C0D /* HTTPRequest */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = HTTPRequest; path = ../HTTPRequest; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +86,7 @@
 		E6625AC0295466DE0052864C = {
 			isa = PBXGroup;
 			children = (
+				E6C7FD332957A2A000830C0D /* HTTPRequest */,
 				E6625ACB295466DE0052864C /* Stravatar */,
 				E6625ADD295466E00052864C /* StravatarTests */,
 				E6625AE7295466E00052864C /* StravatarUITests */,

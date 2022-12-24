@@ -12,8 +12,11 @@ import HTTPRequest
 
 struct Home: ReducerProtocol {
     
+    private let bearerToken = ""
+    
     struct State: Equatable {
-        var text: String = ""       
+        var text: String = ""
+        let url = URL(string: "\(Endpoint.activity.rawValue)")!
     }
     
     enum Action: Equatable {
@@ -25,13 +28,24 @@ struct Home: ReducerProtocol {
         switch action {
             
         case .onAppearance:
+            var urlRequest = URLRequest(url: state.url)
+            urlRequest.addValue(bearerToken, forHTTPHeaderField: "Authorization")
+            let request = urlRequest
             return .task {
-                await .handleResponse(TaskResult { try await httpRequest.get(url: "https://www.boredapi.com/api/activity") })
+                await .handleResponse(TaskResult {
+                    try await httpRequest.get(request: request)
+                })
             }
         case .handleResponse(.success(let result)):
-            state.text = result.activity
+            state.text = result.username
             return .none
-        case .handleResponse(.failure):
+        case .handleResponse(.failure(let result)):
+            if let error = result as? HTTPRequestError {
+                switch error {
+                case .requestFailed(response: let response):
+                    state.text = response.debugDescription
+                }
+            }
             return .none
         }
     }
@@ -40,5 +54,9 @@ struct Home: ReducerProtocol {
 }
 
 struct Activity: Equatable, Decodable {
-    let activity: String
+    let username: String
+}
+
+enum Endpoint: String {
+    case activity = "https://www.strava.com/api/v3/athlete"
 }
