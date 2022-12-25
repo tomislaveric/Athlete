@@ -52,6 +52,7 @@
 		E6625AFD295467EA0052864C /* HomeLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeLogic.swift; sourceTree = "<group>"; };
 		E6625AFE295467EA0052864C /* HomeScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		E6625B012954832D0052864C /* TCA+Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCA+Dependencies.swift"; sourceTree = "<group>"; };
+		E6B8A28B2958BEB100B23369 /* strava-api */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "strava-api"; path = "../../strava-api"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +107,7 @@
 		E6625ACB295466DE0052864C /* Stravatar */ = {
 			isa = PBXGroup;
 			children = (
+				E6B8A28B2958BEB100B23369 /* strava-api */,
 				E6625AFC295467D60052864C /* Home */,
 				E6625ACC295466DE0052864C /* StravatarApp.swift */,
 				E6625AD0295466DF0052864C /* Assets.xcassets */,

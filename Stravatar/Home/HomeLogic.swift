@@ -31,9 +31,11 @@ struct Home: ReducerProtocol {
                 })
             }
         case .handleResponse(.success(let result)):
-            state.text = result.username
+            dump(result)
+            state.text = result.username ?? "12"
             return .none
-        case .handleResponse(.failure):
+        case .handleResponse(.failure(let error)):
+            print(error)
             return .none
         }
     }
