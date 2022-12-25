@@ -18,7 +18,7 @@
 		E6625AFF295467EB0052864C /* HomeLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6625AFD295467EA0052864C /* HomeLogic.swift */; };
 		E6625B00295467EB0052864C /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6625AFE295467EA0052864C /* HomeScreen.swift */; };
 		E6625B022954832D0052864C /* TCA+Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6625B012954832D0052864C /* TCA+Dependencies.swift */; };
-		E6C7FD422957B3E400830C0D /* StravaApi in Frameworks */ = {isa = PBXBuildFile; productRef = E6C7FD412957B3E400830C0D /* StravaApi */; };
+		E6C7FD4C29581F1500830C0D /* StravaApi in Frameworks */ = {isa = PBXBuildFile; productRef = E6C7FD4B29581F1500830C0D /* StravaApi */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,7 +61,7 @@
 			files = (
 				E6625AF9295467600052864C /* ComposableArchitecture in Frameworks */,
 				E6625AFB295467600052864C /* Dependencies in Frameworks */,
-				E6C7FD422957B3E400830C0D /* StravaApi in Frameworks */,
+				E6C7FD4C29581F1500830C0D /* StravaApi in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,7 +176,7 @@
 			packageProductDependencies = (
 				E6625AF8295467600052864C /* ComposableArchitecture */,
 				E6625AFA295467600052864C /* Dependencies */,
-				E6C7FD412957B3E400830C0D /* StravaApi */,
+				E6C7FD4B29581F1500830C0D /* StravaApi */,
 			);
 			productName = Stravatar;
 			productReference = E6625AC9295466DE0052864C /* Stravatar.app */;
@@ -252,7 +252,7 @@
 			mainGroup = E6625AC0295466DE0052864C;
 			packageReferences = (
 				E6625AF7295467600052864C /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
-				E6C7FD402957B3E400830C0D /* XCRemoteSwiftPackageReference "StravaApi" */,
+				E6C7FD4A29581F1500830C0D /* XCRemoteSwiftPackageReference "strava-api" */,
 			);
 			productRefGroup = E6625ACA295466DE0052864C /* Products */;
 			projectDirPath = "";
@@ -663,9 +663,9 @@
 				kind = branch;
 			};
 		};
-		E6C7FD402957B3E400830C0D /* XCRemoteSwiftPackageReference "StravaApi" */ = {
+		E6C7FD4A29581F1500830C0D /* XCRemoteSwiftPackageReference "strava-api" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/tomislaveric/StravaApi";
+			repositoryURL = "https://github.com/tomislaveric/strava-api.git";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -684,9 +684,9 @@
 			package = E6625AF7295467600052864C /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = Dependencies;
 		};
-		E6C7FD412957B3E400830C0D /* StravaApi */ = {
+		E6C7FD4B29581F1500830C0D /* StravaApi */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E6C7FD402957B3E400830C0D /* XCRemoteSwiftPackageReference "StravaApi" */;
+			package = E6C7FD4A29581F1500830C0D /* XCRemoteSwiftPackageReference "strava-api" */;
 			productName = StravaApi;
 		};
 /* End XCSwiftPackageProductDependency section */
