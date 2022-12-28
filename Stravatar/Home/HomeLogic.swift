@@ -49,11 +49,14 @@ struct Home: ReducerProtocol {
             return .run { send in
                 await authorize(send: send)
             }
+            .receive(on: mainQueue)
+            .eraseToEffect()
         case .handleSuccessfulAuth(let url):
             // TODO: Extract code and so on from URL
-            return .none
-            // TODO: Einbauen von..
-            //.receive(on:
+            return
+                .none
+                .receive(on: mainQueue)
+                .eraseToEffect()
         }
     }
     
@@ -68,4 +71,5 @@ struct Home: ReducerProtocol {
     
     @Dependency(\.stravaApi) var stravaApi
     @Dependency(\.oAuth) var oAuth
+    @Dependency(\.mainQueue) var mainQueue
 }
