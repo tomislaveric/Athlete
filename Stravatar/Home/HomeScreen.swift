@@ -15,10 +15,14 @@ struct HomeScreen: View {
         WithViewStore(store) { viewStore in
             VStack {
                 Text(viewStore.state.text)
-                    .onAppear {
-                        viewStore.send(.onAppearance)
-                    }
-            }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                Button("Authorize") {
+                    viewStore.send(.authorizeTapped)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .onAppear {
+                viewStore.send(.onAppearance)
+            }
         }
     } 
 }
