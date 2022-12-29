@@ -15,8 +15,11 @@ struct HomeScreen: View {
         WithViewStore(store) { viewStore in
             VStack {
                 Text(viewStore.state.text)
-                Button("Authorize") {
-                    viewStore.send(.authorizeTapped)
+                Button("Get Profile") {
+                    viewStore.send(.getProfileTapped)
+                }
+                Button("Get Activities") {
+                    viewStore.send(.getActivitiesTapped)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

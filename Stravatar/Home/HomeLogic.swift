@@ -20,10 +20,10 @@ struct Home: ReducerProtocol {
     
     enum Action: Equatable {
         case onAppearance
-        case handleResponse(TaskResult<Athlete>)
-        case authorizeTapped
-        case startAuthorization
-        case handleAuthResult(TaskResult<String?>)
+        case handleAthleteResponse(TaskResult<Athlete>)
+        case handleActivitiesResponse(TaskResult<[DetailedActivity]>)
+        case getProfileTapped
+        case getActivitiesTapped
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
@@ -31,40 +31,34 @@ struct Home: ReducerProtocol {
             
         case .onAppearance:
             return .none
-        case .handleResponse(.success(let result)):
-            dump(result)
-            state.text = result.username ?? ""
-            return .none
-        case .handleResponse(.failure(let error)):
-            print(error)
-            state.text = "Request error"
-            return .none
-        case .authorizeTapped:
-            return EffectTask(value: Action.startAuthorization)
-        case .startAuthorization:
+        case .getProfileTapped:
             return .task {
-                await .handleAuthResult(TaskResult {
-                    try await oAuth.authorize()
+                await .handleAthleteResponse(TaskResult {
+                    try await stravaApi.getProfile()
                 })
             }
-        case .handleAuthResult(.success(let token)):
+        case .getActivitiesTapped:
             return .task {
-                await .handleResponse(TaskResult {
-                    try await stravaApi.getProfile(token: token)
+                await .handleActivitiesResponse(TaskResult {
+                    try await stravaApi.getUserActivities()
                 })
             }
-        case .handleAuthResult(.failure(let error)):
-            print(error)
+        case .handleActivitiesResponse(.success(let activities)):
+            state.text = activities.first?.name ?? ""
+            return .none
+        case .handleActivitiesResponse(.failure(let error)):
+            state.text = error.localizedDescription
+            return .none
+        case .handleAthleteResponse(.success(let athlete)):
+            state.text = athlete.firstname ?? ""
+            return .none
+            
+        case .handleAthleteResponse(.failure(let error)):
+            state.text = error.localizedDescription
             return .none
         }
     }
     
-    @MainActor
-    private func authorize() async throws -> String? {
-        return try await oAuth.authorize()
-    }
-    
     @Dependency(\.stravaApi) var stravaApi
-    @Dependency(\.oAuth) var oAuth
     @Dependency(\.mainQueue) var mainQueue
 }
