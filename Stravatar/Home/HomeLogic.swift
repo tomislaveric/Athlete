@@ -23,18 +23,14 @@ struct Home: ReducerProtocol {
         case handleResponse(TaskResult<Athlete>)
         case authorizeTapped
         case startAuthorization
-        case handleSuccessfulAuth(URL)
+        case handleAuthResult(TaskResult<String?>)
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
             
         case .onAppearance:
-            return .task {
-                await .handleResponse(TaskResult {
-                    try await stravaApi.getProfile()
-                })
-            }
+            return .none
         case .handleResponse(.success(let result)):
             dump(result)
             state.text = result.username ?? ""
@@ -46,27 +42,26 @@ struct Home: ReducerProtocol {
         case .authorizeTapped:
             return EffectTask(value: Action.startAuthorization)
         case .startAuthorization:
-            return .run { send in
-                await authorize(send: send)
+            return .task {
+                await .handleAuthResult(TaskResult {
+                    try await oAuth.authorize()
+                })
             }
-            .receive(on: mainQueue)
-            .eraseToEffect()
-        case .handleSuccessfulAuth(let url):
-            // TODO: Extract code and so on from URL
-            return
-                .none
-                .receive(on: mainQueue)
-                .eraseToEffect()
+        case .handleAuthResult(.success(let token)):
+            return .task {
+                await .handleResponse(TaskResult {
+                    try await stravaApi.getProfile(token: token)
+                })
+            }
+        case .handleAuthResult(.failure(let error)):
+            print(error)
+            return .none
         }
     }
     
     @MainActor
-    private func authorize(send: Send<Home.Action>) -> Void {
-        oAuth.authorize { url, error in
-            if let url = url {
-                send(.handleSuccessfulAuth(url))
-            }
-        }
+    private func authorize() async throws -> String? {
+        return try await oAuth.authorize()
     }
     
     @Dependency(\.stravaApi) var stravaApi
