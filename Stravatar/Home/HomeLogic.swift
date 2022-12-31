@@ -16,6 +16,7 @@ struct Home: ReducerProtocol {
         var text: String = ""
         var authorizationInProgress = false
         var authorizedURL: URL? = nil
+        var activities: [DetailedActivity] = []
     }
     
     enum Action: Equatable {
@@ -44,7 +45,7 @@ struct Home: ReducerProtocol {
                 })
             }
         case .handleActivitiesResponse(.success(let activities)):
-            state.text = activities.first?.name ?? ""
+            state.activities = activities
             return .none
         case .handleActivitiesResponse(.failure(let error)):
             state.text = error.localizedDescription

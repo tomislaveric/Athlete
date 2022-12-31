@@ -21,6 +21,9 @@ struct HomeScreen: View {
                 Button("Get Activities") {
                     viewStore.send(.getActivitiesTapped)
                 }
+                ForEach(viewStore.activities, id: \.id) { activity in
+                    Text(activity.name)
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
