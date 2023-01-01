@@ -8,20 +8,15 @@
 import Foundation
 import ComposableArchitecture
 import StravaApi
+import OAuth
 
 extension DependencyValues {
     private enum StravaApiKey: DependencyKey {
         typealias Value = StravaApi
-        static let config = StravaConfig(
-            authorizeUrl: "",
-            tokenUrl: "",
-            clientId: "",
-            redirectUri: "",
-            callbackURLScheme: "",
-            clientSecret: "",
-            scope: [""]
+        static let config = OAuthConfig(
+            scope: "activity:read",
         )
-        static let liveValue: StravaApi = StravaApiImpl(config: config)
+        static let liveValue: StravaApi = StravaApiImpl(oAuthClient: OAuthImpl(config: config))
     }
     
     var stravaApi: StravaApi {
