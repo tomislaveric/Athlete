@@ -21,7 +21,7 @@ struct Home: ReducerProtocol {
     
     enum Action: Equatable {
         case onAppearance
-        case handleAthleteResponse(TaskResult<Athlete>)
+        case handleAthleteResponse(TaskResult<DetailedAthlete>)
         case handleActivitiesResponse(TaskResult<[DetailedActivity]>)
         case getProfileTapped
         case getActivitiesTapped
