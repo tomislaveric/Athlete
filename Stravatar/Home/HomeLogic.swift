@@ -45,7 +45,7 @@ struct Home: ReducerProtocol {
                 })
             }
         case .handleActivitiesResponse(.success(let activities)):
-            state.activities = activities.map { Activity(detailedactity: $0) }
+            state.activities = activities.map { Activity(detailedActivity: $0) }
             return .none
         case .handleActivitiesResponse(.failure(let error)):
             state.text = error.localizedDescription

@@ -17,9 +17,9 @@ struct Activity: Equatable {
         return hasHeartRate
     }
     
-    init(detailedactity: DetailedActivity) {
-        self.id = detailedactity.id
-        self.name = detailedactity.name ?? ""
-        self.hasHeartRate = detailedactity.has_heartrate ?? false
+    init(detailedActivity: DetailedActivity) {
+        self.id = detailedActivity.id
+        self.name = detailedActivity.name ?? ""
+        self.hasHeartRate = detailedActivity.has_heartrate ?? false
     }
 }
