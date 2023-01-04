@@ -35,13 +35,13 @@ struct Home: ReducerProtocol {
         case .getProfileTapped:
             return .task {
                 await .handleAthleteResponse(TaskResult {
-                    try await stravaApi.getProfile()
+                    try await stravaApi.getDetailedAthlete()
                 })
             }
         case .getActivitiesTapped:
             return .task {
                 await .handleActivitiesResponse(TaskResult {
-                    try await stravaApi.getUserActivities()
+                    try await stravaApi.getAthleteDetailedActivities()
                 })
             }
         case .handleActivitiesResponse(.success(let activities)):
