@@ -13,10 +13,10 @@ import OAuth
 extension DependencyValues {
     private enum StravaApiKey: DependencyKey {
         typealias Value = StravaApi
-        static let config = OAuthConfig(
+        static let config = StravaConfig(
             scope: "activity:read",
         )
-        static let liveValue: StravaApi = StravaApiImpl(oAuthClient: OAuthImpl(config: config))
+        static let liveValue: StravaApi = StravaApiImpl(config: config, oAuthClient: OAuthImpl(callbackURLScheme: config.callbackURLScheme))
     }
     
     var stravaApi: StravaApi {

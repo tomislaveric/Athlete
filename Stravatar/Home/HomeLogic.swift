@@ -41,7 +41,7 @@ struct Home: ReducerProtocol {
         case .getActivitiesTapped:
             return .task {
                 await .handleActivitiesResponse(TaskResult {
-                    try await stravaApi.getAthleteDetailedActivities()
+                    try await stravaApi.getAthleteDetailedActivities(params: nil)
                 })
             }
         case .handleActivitiesResponse(.success(let activities)):
