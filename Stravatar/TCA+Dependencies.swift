@@ -9,6 +9,7 @@ import Foundation
 import ComposableArchitecture
 import StravaApi
 import OAuth
+import KeychainStorage
 
 extension DependencyValues {
     private enum StravaApiKey: DependencyKey {
@@ -22,5 +23,15 @@ extension DependencyValues {
     var stravaApi: StravaApi {
         get { self[StravaApiKey.self] }
         set { self[StravaApiKey.self] = newValue }
+    }
+    
+    private enum KeychainStorageKey: DependencyKey {
+        typealias Value = KeychainStorage
+        static let liveValue: KeychainStorage = KeychainStorageImpl()
+    }
+    
+    var keychainStorage: KeychainStorage {
+        get { self[KeychainStorageKey.self] }
+        set { self[KeychainStorageKey.self] = newValue }
     }
 }

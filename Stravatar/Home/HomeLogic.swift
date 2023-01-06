@@ -31,7 +31,12 @@ struct Home: ReducerProtocol {
         switch action {
             
         case .onAppearance:
-            return .none
+            let storageName = Bundle.main.bundleIdentifier ?? "strava_api.oauth_token"
+            return .fireAndForget {
+                stravaApi.registerTokenUpdate(current: try storage.read(name: storageName)) { newToken in
+                    try storage.save(name: storageName, object: newToken)
+                }
+            }
         case .getProfileTapped:
             return .task {
                 await .handleAthleteResponse(TaskResult {
@@ -61,6 +66,7 @@ struct Home: ReducerProtocol {
         }
     }
     
+    @Dependency(\.keychainStorage) var storage
     @Dependency(\.stravaApi) var stravaApi
     @Dependency(\.mainQueue) var mainQueue
 }
