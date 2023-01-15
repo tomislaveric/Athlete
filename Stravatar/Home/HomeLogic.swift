@@ -23,8 +23,10 @@ struct Home: ReducerProtocol {
         case onAppearance
         case handleAthleteResponse(TaskResult<DetailedAthlete>)
         case handleActivitiesResponse(TaskResult<[DetailedActivity]>)
+        case handleCreateActivityResponse(TaskResult<DetailedActivity>)
         case getProfileTapped
         case getActivitiesTapped
+        case createActivtyTapped
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
@@ -46,13 +48,14 @@ struct Home: ReducerProtocol {
         case .getActivitiesTapped:
             return .task {
                 await .handleActivitiesResponse(TaskResult {
-                    try await stravaApi.getAthleteDetailedActivities(params: nil)
+                    try await stravaApi.getAthleteDetailedActivities()
                 })
             }
         case .handleActivitiesResponse(.success(let activities)):
             state.activities = activities.map { Activity(detailedActivity: $0) }
             return .none
         case .handleActivitiesResponse(.failure(let error)):
+            dump(error)
             state.text = error.localizedDescription
             return .none
         case .handleAthleteResponse(.success(let athlete)):
@@ -61,6 +64,18 @@ struct Home: ReducerProtocol {
             
         case .handleAthleteResponse(.failure(let error)):
             dump(error)
+            state.text = error.localizedDescription
+            return .none
+        case .createActivtyTapped:
+            return .task {
+                await .handleCreateActivityResponse(TaskResult {
+                    try await stravaApi.createActivity(name: "This is a Test", type: .Ride, startDate: Date(), elapsedTime: 3555, description: "This is a test")
+                })
+            }
+        case .handleCreateActivityResponse(.success(let activity)):
+            state.activities = [Activity(detailedActivity: activity)]
+            return .none
+        case .handleCreateActivityResponse(.failure(let error)):
             state.text = error.localizedDescription
             return .none
         }

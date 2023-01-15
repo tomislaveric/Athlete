@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct HomeScreen: View {
-    let store: Store<Home.State, Home.Action>
+    let store: StoreOf<Home>
 
     var body: some View {
         WithViewStore(store) { viewStore in
@@ -20,6 +20,9 @@ struct HomeScreen: View {
                 }
                 Button("Get Activities") {
                     viewStore.send(.getActivitiesTapped)
+                }
+                Button("Create Activity") {
+                    viewStore.send(.createActivtyTapped)
                 }
                 ForEach(viewStore.activities, id: \.id) { activity in
                     Text(activity.name)
