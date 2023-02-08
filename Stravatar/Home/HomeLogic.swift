@@ -23,32 +23,29 @@ struct Home: ReducerProtocol {
         case onAppearance
         case handleAthleteResponse(TaskResult<DetailedAthlete>)
         case handleActivitiesResponse(TaskResult<[DetailedActivity]>)
-        case handleCreateActivityResponse(TaskResult<DetailedActivity>)
+        case handleHeartRateZonesResponse(TaskResult<Zones>)
         case getProfileTapped
         case getActivitiesTapped
-        case createActivtyTapped
+        case getHeartRateZonesTapped
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
             
         case .onAppearance:
-            let storageName = Bundle.main.bundleIdentifier ?? "strava_api.oauth_token"
             return .fireAndForget {
-                stravaApi.registerTokenUpdate(current: try storage.read(name: storageName)) { newToken in
-                    try storage.save(name: storageName, object: newToken)
-                }
+                try await stravaApi.registerTokenUpdate()
             }
         case .getProfileTapped:
             return .task {
                 await .handleAthleteResponse(TaskResult {
-                    try await stravaApi.getDetailedAthlete()
+                    try await stravaApi.getProfile()
                 })
             }
         case .getActivitiesTapped:
             return .task {
                 await .handleActivitiesResponse(TaskResult {
-                    try await stravaApi.getAthleteDetailedActivities()
+                    try await stravaApi.getActivities()
                 })
             }
         case .handleActivitiesResponse(.success(let activities)):
@@ -66,18 +63,17 @@ struct Home: ReducerProtocol {
             dump(error)
             state.text = error.localizedDescription
             return .none
-        case .createActivtyTapped:
+        case .handleHeartRateZonesResponse(.success(let zone)):
+            state.text = "\(zone.heart_rate?.zones?.first?.max)"
+            return .none
+        case .handleHeartRateZonesResponse(.failure(let error)):
+            return .none
+        case .getHeartRateZonesTapped:
             return .task {
-                await .handleCreateActivityResponse(TaskResult {
-                    try await stravaApi.createActivity(name: "This is a Test", type: .Ride, startDate: Date(), elapsedTime: 3555, description: "This is a test")
+                await .handleHeartRateZonesResponse(TaskResult {
+                    try await stravaApi.getAthleteZones()
                 })
             }
-        case .handleCreateActivityResponse(.success(let activity)):
-            state.activities = [Activity(detailedActivity: activity)]
-            return .none
-        case .handleCreateActivityResponse(.failure(let error)):
-            state.text = error.localizedDescription
-            return .none
         }
     }
     

@@ -21,8 +21,8 @@ struct HomeScreen: View {
                 Button("Get Activities") {
                     viewStore.send(.getActivitiesTapped)
                 }
-                Button("Create Activity") {
-                    viewStore.send(.createActivtyTapped)
+                Button("Get Zones") {
+                    viewStore.send(.getHeartRateZonesTapped)
                 }
                 ForEach(viewStore.activities, id: \.id) { activity in
                     Text(activity.name)
