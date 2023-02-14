@@ -10,6 +10,7 @@ import ComposableArchitecture
 import StravaApi
 import OAuth
 import KeychainStorage
+import SkillEngine
 
 extension DependencyValues {
     
@@ -26,6 +27,16 @@ extension DependencyValues {
     var keychainStorage: KeychainStorage {
         get { self[KeychainStorageKey.self] }
         set { self[KeychainStorageKey.self] = newValue }
+    }
+    
+    private enum SkillEngineKey: DependencyKey {
+        typealias Value = SkillEngine
+        static let liveValue: SkillEngine = SkillEngineImpl()
+    }
+    
+    var skillEngine: SkillEngine {
+        get { self[SkillEngineKey.self] }
+        set { self[SkillEngineKey.self] = newValue }
     }
 }
 

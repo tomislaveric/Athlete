@@ -64,9 +64,13 @@ struct Home: ReducerProtocol {
             state.text = error.localizedDescription
             return .none
         case .handleHeartRateZonesResponse(.success(let zone)):
-            state.text = "\(zone.heart_rate?.zones?.first?.max)"
+            if let zones = zone.heart_rate?.zones, let ranges = mapHeartRateZones(zoneRanges: zones) {
+                skillEngine.setup(zone1: ranges[0], zone2: ranges[1], zone3: ranges[2], zone4: ranges[3], zone5: ranges[4])
+            }
+            state.text = "Points: \(skillEngine.getPointsFor(heartRate: 280))"
             return .none
         case .handleHeartRateZonesResponse(.failure(let error)):
+            dump(error)
             return .none
         case .getHeartRateZonesTapped:
             return .task {
@@ -75,9 +79,19 @@ struct Home: ReducerProtocol {
                 })
             }
         }
+        
+        func mapHeartRateZones(zoneRanges: [ZoneRange]) -> [Range<Int>]? {
+            return zoneRanges.compactMap {
+                if let min = $0.min, let max = $0.max {
+                    return min..<(max < min ? Int.max : max)
+                }
+                return nil
+            }
+        }
     }
     
     @Dependency(\.keychainStorage) var storage
     @Dependency(\.stravaApi) var stravaApi
+    @Dependency(\.skillEngine) var skillEngine
     @Dependency(\.mainQueue) var mainQueue
 }

@@ -4,6 +4,8 @@ public protocol SkillEngine {
 }
 
 public class SkillEngineImpl: SkillEngine {
+    public init() {}
+    
     public func setup(zone1: Range<Int>, zone2: Range<Int>, zone3: Range<Int>, zone4: Range<Int>, zone5: Range<Int>) {
         self.userZones = [
             Zone(range: zone1, type: .zone1),
