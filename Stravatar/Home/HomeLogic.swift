@@ -13,85 +13,115 @@ import StravaApi
 struct Home: ReducerProtocol {
     
     struct State: Equatable {
+        var playerHub: PlayerHub.State
+        var activityList: ActivityList.State
+        
         var text: String = ""
-        var authorizationInProgress = false
-        var authorizedURL: URL? = nil
         var activities: [Activity] = []
+        var activityStreamSets: StreamSet?
+        var firstActivityId: Int? {
+            activities.first?.id
+        }
     }
     
     enum Action: Equatable {
+        case playerHub(PlayerHub.Action)
+        case activityList(ActivityList.Action)
         case onAppearance
         case handleAthleteResponse(TaskResult<DetailedAthlete>)
         case handleActivitiesResponse(TaskResult<[DetailedActivity]>)
         case handleHeartRateZonesResponse(TaskResult<Zones>)
-        case getProfileTapped
-        case getActivitiesTapped
-        case getHeartRateZonesTapped
-    }
-    
-    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        switch action {
-            
-        case .onAppearance:
-            return .fireAndForget {
-                try await stravaApi.registerTokenUpdate()
-            }
-        case .getProfileTapped:
-            return .task {
-                await .handleAthleteResponse(TaskResult {
-                    try await stravaApi.getProfile()
-                })
-            }
-        case .getActivitiesTapped:
-            return .task {
-                await .handleActivitiesResponse(TaskResult {
-                    try await stravaApi.getActivities()
-                })
-            }
-        case .handleActivitiesResponse(.success(let activities)):
-            state.activities = activities.map { Activity(detailedActivity: $0) }
-            return .none
-        case .handleActivitiesResponse(.failure(let error)):
-            dump(error)
-            state.text = error.localizedDescription
-            return .none
-        case .handleAthleteResponse(.success(let athlete)):
-            state.text = athlete.firstname ?? ""
-            return .none
-            
-        case .handleAthleteResponse(.failure(let error)):
-            dump(error)
-            state.text = error.localizedDescription
-            return .none
-        case .handleHeartRateZonesResponse(.success(let zone)):
-            if let zones = zone.heart_rate?.zones, let ranges = mapHeartRateZones(zoneRanges: zones) {
-                skillEngine.setup(zone1: ranges[0], zone2: ranges[1], zone3: ranges[2], zone4: ranges[3], zone5: ranges[4])
-            }
-            state.text = "Points: \(skillEngine.getPointsFor(heartRate: 280))"
-            return .none
-        case .handleHeartRateZonesResponse(.failure(let error)):
-            dump(error)
-            return .none
-        case .getHeartRateZonesTapped:
-            return .task {
-                await .handleHeartRateZonesResponse(TaskResult {
-                    try await stravaApi.getAthleteZones()
-                })
-            }
-        }
+        case handleActivityHeartRateResponse(TaskResult<StreamSet>)
         
-        func mapHeartRateZones(zoneRanges: [ZoneRange]) -> [Range<Int>]? {
-            return zoneRanges.compactMap {
-                if let min = $0.min, let max = $0.max {
-                    return min..<(max < min ? Int.max : max)
-                }
-                return nil
-            }
-        }
+        case getActivityHeartRateStreamTapped
     }
     
-    @Dependency(\.keychainStorage) var storage
     @Dependency(\.stravaApi) var stravaApi
     @Dependency(\.skillEngine) var skillEngine
     @Dependency(\.mainQueue) var mainQueue
+    
+    var body: some ReducerProtocol<State, Action> {
+        Scope(state: \.playerHub, action: /Action.playerHub) {
+            PlayerHub()
+        }
+        Scope(state: \.activityList, action: /Action.activityList) {
+            ActivityList()
+        }
+        Reduce { state, action in
+            switch action {
+                
+            case .onAppearance:
+                return .concatenate(
+                    .fireAndForget {
+                        try await stravaApi.registerTokenUpdate()
+                    },
+                    .task {
+                        await .handleAthleteResponse(TaskResult {
+                            try await stravaApi.getProfile()
+                        })
+                    },
+                    .task {
+                        await .handleHeartRateZonesResponse(TaskResult {
+                            try await stravaApi.getAthleteZones()
+                        })
+                    },
+                    .task {
+                        await .handleActivitiesResponse(TaskResult {
+                            try await stravaApi.getActivities()
+                        })
+                    }
+                )
+            case .handleActivitiesResponse(.success(let response)):
+                let activities = response.map { Activity(id: $0.id, name: $0.name) }
+                return .init(value: .activityList(.setActivities(activities)))
+            
+            case .handleAthleteResponse(.success(let athlete)):
+                return .init(value: .playerHub(.setName(athlete.firstname )))
+            
+            case .handleHeartRateZonesResponse(.success(let zone)):
+                guard let zones = zone.heart_rate?.zones, let ranges = mapHeartRateZones(zoneRanges: zones) else { return .none }
+                return .init(value: .playerHub(.setHRzones(ranges)))
+                
+            case .handleActivityHeartRateResponse(.success(let streamSet)):
+                state.activityStreamSets = streamSet
+                guard let time = streamSet.time?.data?.last, let hrData = streamSet.heartrate?.data else { return .none }
+                
+                let points = hrData.map({ skillEngine.getPointsFor(heartRate: Int($0)) }).reduce(0, +)
+                
+                state.text = "Points: \(points)"
+                return .none
+            case .getActivityHeartRateStreamTapped:
+                guard let id = state.firstActivityId else { return .none }
+                return .task {
+                    await .handleActivityHeartRateResponse(TaskResult {
+                        try await stravaApi.getActivityHeartRateStream(id)
+                    })
+                }
+            case .playerHub:
+                return .none
+            case .activityList:
+                return .none
+            case .handleHeartRateZonesResponse(.failure(let error)):
+                dump(error)
+                return .none
+            case .handleAthleteResponse(.failure(let error)):
+                dump(error)
+                return .none
+            case .handleActivitiesResponse(.failure(let error)):
+                dump(error)
+                return .none
+            case .handleActivityHeartRateResponse(.failure(let error)):
+                dump(error)
+                return .none
+            }
+        }
+    }
+    func mapHeartRateZones(zoneRanges: [ZoneRange]) -> [Range<Int>]? {
+        return zoneRanges.compactMap {
+            if let min = $0.min, let max = $0.max {
+                return min..<(max < min ? Int.max : max)
+            }
+            return nil
+        }
+    }
 }

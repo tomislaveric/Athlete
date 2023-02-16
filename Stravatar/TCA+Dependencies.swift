@@ -19,16 +19,6 @@ extension DependencyValues {
         set { self[StravaUseCase.self] = newValue }
     }
     
-    private enum KeychainStorageKey: DependencyKey {
-        typealias Value = KeychainStorage
-        static let liveValue: KeychainStorage = KeychainStorageImpl()
-    }
-    
-    var keychainStorage: KeychainStorage {
-        get { self[KeychainStorageKey.self] }
-        set { self[KeychainStorageKey.self] = newValue }
-    }
-    
     private enum SkillEngineKey: DependencyKey {
         typealias Value = SkillEngine
         static let liveValue: SkillEngine = SkillEngineImpl()
@@ -45,6 +35,7 @@ public struct StravaUseCase {
     var getProfile: () async throws -> DetailedAthlete
     var getActivities: () async throws -> [DetailedActivity]
     var getAthleteZones: () async throws -> Zones
+    var getActivityHeartRateStream: (_ id: Int) async throws -> StreamSet
 }
 
 extension StravaUseCase: DependencyKey {
@@ -62,9 +53,10 @@ extension StravaUseCase: DependencyKey {
     
     private static let storageName = Bundle.main.bundleIdentifier ?? "strava_api.oauth_token"
     public static let liveValue = Self(
-        registerTokenUpdate: { try await api.registerTokenUpdate(current: storage.read(name: storageName), callback: { newToken in try storage.save(name: storageName, object: newToken)}) },
+        registerTokenUpdate: { try api.registerTokenUpdate(current: storage.read(name: storageName), callback: { newToken in try storage.save(name: storageName, object: newToken)}) },
         getProfile: { try await api.getDetailedAthlete() },
         getActivities: { try await api.getAthleteDetailedActivities() },
-        getAthleteZones: { try await api.getAthleteZones() }
+        getAthleteZones: { try await api.getAthleteZones() },
+        getActivityHeartRateStream: { id in try await api.getActivityStreams(by: id, keys: [.heartrate, .time])}
     )
 }

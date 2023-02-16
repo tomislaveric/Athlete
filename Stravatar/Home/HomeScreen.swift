@@ -13,22 +13,21 @@ struct HomeScreen: View {
 
     var body: some View {
         WithViewStore(store) { viewStore in
-            VStack {
+            VStack(spacing: 0) {
+                HStack(alignment: .top, spacing: 0) {
+                    ActivityListView(store: store.scope(state: \.activityList, action: Home.Action.activityList))
+                    Spacer()
+                        .frame(maxWidth: .infinity)
+                    PlayerHubView(store: store.scope(state: \.playerHub, action: Home.Action.playerHub))
+                }
+                
                 Text(viewStore.state.text)
-                Button("Get Profile") {
-                    viewStore.send(.getProfileTapped)
-                }
-                Button("Get Activities") {
-                    viewStore.send(.getActivitiesTapped)
-                }
-                Button("Get Zones") {
-                    viewStore.send(.getHeartRateZonesTapped)
-                }
-                ForEach(viewStore.activities, id: \.id) { activity in
-                    Text(activity.name)
+
+                Button("Get Activity HeartStream") {
+                    viewStore.send(.getActivityHeartRateStreamTapped)
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .onAppear {
                 viewStore.send(.onAppearance)
             }
