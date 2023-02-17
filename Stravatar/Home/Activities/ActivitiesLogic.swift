@@ -21,7 +21,6 @@ struct ActivitiesLogic: ReducerProtocol {
         case fetchActivities
         case handleActivitiesResponse(TaskResult<[Activity]>)
         case setActivities([Activity]?)
-        case handleActivityHeartRateResponse(TaskResult<ActivityHeartRate>)
     }
     
     @Dependency(\.stravaApi) var stravaApi
@@ -43,22 +42,13 @@ struct ActivitiesLogic: ReducerProtocol {
                 state.isLoading = false
                 dump(error)
                 return .none
-            case .activityElement(id: let id, action: let action):
-                switch action {
-                case .activitySelected:
-                    return .task {
-                        await .handleActivityHeartRateResponse(TaskResult {
-                            try await stravaApi.getActivityHeartRateStream(id)
-                        })
-                    }
-                }
-            case .handleActivityHeartRateResponse(.success(let response)):
-                return .none
-            case .handleActivityHeartRateResponse(.failure):
+            case .activityElement:
                 return .none
             case .setActivities(let activities):
                 guard let activities = activities?.prefix(state.amountOfActivities) else { return .none }
-                state.activities = IdentifiedArrayOf(uniqueElements: activities.map { ActivityElementLogic.State(id: $0.id ?? UUID().hashValue, name: $0.name) })
+                state.activities = IdentifiedArrayOf(uniqueElements: activities.map {
+                    ActivityElementLogic.State(id: $0.id ?? UUID().hashValue, name: $0.name)
+                })
                 return .none
             }
         }.forEach(\.activities, action: /Action.activityElement(id:action:)) {

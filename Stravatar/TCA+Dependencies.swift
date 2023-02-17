@@ -53,7 +53,13 @@ extension StravaUseCase: DependencyKey {
     
     private static let storageName = Bundle.main.bundleIdentifier ?? "strava_api.oauth_token"
     public static let liveValue = Self(
-        registerTokenUpdate: { try api.registerTokenUpdate(current: storage.read(name: storageName), callback: { newToken in try storage.save(name: storageName, object: newToken)}) },
+        registerTokenUpdate: {
+            try api.registerTokenUpdate(
+                current: storage.read(name: storageName),
+                callback: { newToken in
+                    try storage.save(name: storageName, object: newToken)
+                })
+        },
         getProfile: {
             let athlete = try await api.getDetailedAthlete()
             return Profile(name: athlete.firstname)
