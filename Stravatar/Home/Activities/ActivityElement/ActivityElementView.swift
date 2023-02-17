@@ -15,11 +15,10 @@ struct ActivityElementView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack(alignment: .leading) {
-                Text(viewStore.name ?? "Placeholder")
-                    .redacted(reason: viewStore.isLoading ? .placeholder : [])
-                Text(viewStore.points ?? "Placeholder")
-                    .redacted(reason: viewStore.isLoading ? .placeholder : [])
+                Text(viewStore.name ?? "Activity Name")
+                Text(viewStore.points ?? "Points")
             }
+            .redacted(reason: viewStore.isLoading ? .placeholder : [])
             .onTapGesture {
                 viewStore.send(.activitySelected)
             }
