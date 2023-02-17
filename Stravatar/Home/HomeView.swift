@@ -8,17 +8,17 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct HomeScreen: View {
-    let store: StoreOf<Home>
+struct HomeView: View {
+    let store: StoreOf<HomeLogic>
 
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack(spacing: 0) {
                 HStack(alignment: .top, spacing: 0) {
-                    ActivitiesView(store: store.scope(state: \.activityList, action: Home.Action.activityList))
+                    ActivitiesView(store: store.scope(state: \.activityList, action: HomeLogic.Action.activityList))
                     Spacer()
                         .frame(maxWidth: .infinity)
-                    ProfileView(store: store.scope(state: \.profile, action: Home.Action.profile))
+                    ProfileView(store: store.scope(state: \.profile, action: HomeLogic.Action.profile))
                 }
                 
                 Text(viewStore.state.text)

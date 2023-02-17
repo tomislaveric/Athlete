@@ -11,11 +11,11 @@ import ComposableArchitecture
 @main
 struct StravatarApp: App {
     let store = Store(
-        initialState: Home.State(profile: .init(playerZones: .init()), activityList: .init()),
-        reducer: Home())
+        initialState: HomeLogic.State(profile: .init(playerZones: .init()), activityList: .init()),
+        reducer: HomeLogic())
     var body: some Scene {
         WindowGroup {
-            HomeScreen(store: self.store)
+            HomeView(store: self.store)
         }
     }
 }

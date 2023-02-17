@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 struct ActivityElementView: View {
-    let store: StoreOf<ActivityElement>
+    let store: StoreOf<ActivityElementLogic>
     
     var body: some View {
         WithViewStore(store) { viewStore in

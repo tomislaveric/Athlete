@@ -8,7 +8,7 @@
 import ComposableArchitecture
 import Foundation
 
-struct ActivityElement: ReducerProtocol {
+struct ActivityElementLogic: ReducerProtocol {
     struct State: Equatable, Identifiable {
         var id: Int
         var name: String?

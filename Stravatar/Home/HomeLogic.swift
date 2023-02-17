@@ -10,7 +10,7 @@ import SwiftUI
 import ComposableArchitecture
 import SkillEngine
 
-struct Home: ReducerProtocol {
+struct HomeLogic: ReducerProtocol {
     
     struct State: Equatable {
         var profile: ProfileLogic.State

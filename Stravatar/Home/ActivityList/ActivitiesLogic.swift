@@ -11,13 +11,13 @@ import Foundation
 struct ActivitiesLogic: ReducerProtocol {
     
     struct State: Equatable {
-        var activities: IdentifiedArrayOf<ActivityElement.State> = []
+        var activities: IdentifiedArrayOf<ActivityElementLogic.State> = []
         var isLoading = true
         let amountOfActivities: Int = 5
     }
     
     enum Action: Equatable {
-        case activityElement(id: ActivityElement.State.ID, action: ActivityElement.Action)
+        case activityElement(id: ActivityElementLogic.State.ID, action: ActivityElementLogic.Action)
         case fetchActivities
         case handleActivitiesResponse(TaskResult<[Activity]>)
         case setActivities([Activity]?)
@@ -58,11 +58,11 @@ struct ActivitiesLogic: ReducerProtocol {
                 return .none
             case .setActivities(let activities):
                 guard let activities = activities?.prefix(state.amountOfActivities) else { return .none }
-                state.activities = IdentifiedArrayOf(uniqueElements: activities.map { ActivityElement.State(id: $0.id ?? UUID().hashValue, name: $0.name) })
+                state.activities = IdentifiedArrayOf(uniqueElements: activities.map { ActivityElementLogic.State(id: $0.id ?? UUID().hashValue, name: $0.name) })
                 return .none
             }
         }.forEach(\.activities, action: /Action.activityElement(id:action:)) {
-            ActivityElement()
+            ActivityElementLogic()
         }
     }
 }
