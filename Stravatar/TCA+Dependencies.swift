@@ -32,10 +32,10 @@ extension DependencyValues {
 
 public struct StravaUseCase {
     var registerTokenUpdate: () async throws -> Void
-    var getProfile: () async throws -> DetailedAthlete
-    var getActivities: () async throws -> [DetailedActivity]
-    var getAthleteZones: () async throws -> Zones
-    var getActivityHeartRateStream: (_ id: Int) async throws -> StreamSet
+    var getProfile: () async throws -> Profile
+    var getActivities: () async throws -> [Activity]
+    var getAthleteZones: () async throws -> [Zone]
+    var getActivityHeartRateStream: (_ id: Int) async throws -> ActivityHeartRate
 }
 
 extension StravaUseCase: DependencyKey {
@@ -54,9 +54,50 @@ extension StravaUseCase: DependencyKey {
     private static let storageName = Bundle.main.bundleIdentifier ?? "strava_api.oauth_token"
     public static let liveValue = Self(
         registerTokenUpdate: { try api.registerTokenUpdate(current: storage.read(name: storageName), callback: { newToken in try storage.save(name: storageName, object: newToken)}) },
-        getProfile: { try await api.getDetailedAthlete() },
-        getActivities: { try await api.getAthleteDetailedActivities() },
-        getAthleteZones: { try await api.getAthleteZones() },
-        getActivityHeartRateStream: { id in try await api.getActivityStreams(by: id, keys: [.heartrate, .time])}
+        getProfile: {
+            let athlete = try await api.getDetailedAthlete()
+            return Profile(name: athlete.firstname)
+        },
+        getActivities: {
+            let activities = try await api.getAthleteDetailedActivities()
+            return activities.map { Activity(id: $0.id, name: $0.name) }
+        },
+        getAthleteZones: {
+            let zone = try await api.getAthleteZones()
+            guard let zones = zone.heart_rate?.zones, let ranges = mapHeartRateZones(zoneRanges: zones) else {
+                throw StravaError.couldNotMap
+            }
+            return ranges
+        },
+        getActivityHeartRateStream: { id in
+            guard let data = try await api.getActivityStreams(by: id, keys: [.heartrate, .time]).heartrate?.data else {
+                throw StravaError.couldNotMap
+            }
+            return ActivityHeartRate(data: data.map { Int($0) })
+        }
     )
+    
+    static func mapHeartRateZones(zoneRanges: [ZoneRange]) -> [Zone]? {
+        return zoneRanges.enumerated().compactMap { index, element in
+            if let min = element.min, let max = element.max {
+                return Zone(range: min..<(max < min ? Int.max : max), type: getZoneType(by: index))
+            }
+            return nil
+        }
+        
+        func getZoneType(by index: Int) -> SkillEngine.SEZoneType {
+            switch index {
+            case 0: return .zone1
+            case 1: return .zone2
+            case 2: return .zone3
+            case 3: return .zone4
+            case 4: return .zone5
+            default: return .none
+            }
+        }
+    }
+}
+
+enum StravaError: Error {
+    case couldNotMap
 }

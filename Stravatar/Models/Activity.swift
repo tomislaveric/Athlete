@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import StravaApi
 
 struct Activity: Equatable, Identifiable {
     let id: Int?

@@ -11,7 +11,7 @@ import ComposableArchitecture
 @main
 struct StravatarApp: App {
     let store = Store(
-        initialState: Home.State(playerHub: .init(playerName: nil), activityList: .init()),
+        initialState: Home.State(profile: .init(playerZones: .init()), activityList: .init()),
         reducer: Home())
     var body: some Scene {
         WindowGroup {

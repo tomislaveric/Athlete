@@ -14,8 +14,12 @@ struct ActivityElementView: View {
     
     var body: some View {
         WithViewStore(store) { viewStore in
-            if let name = viewStore.name {
-                Text(name)
+            Group {
+                if let name = viewStore.name {
+                    Text(name)
+                }
+            }.onTapGesture {
+                viewStore.send(.activitySelected)
             }
         }
     }

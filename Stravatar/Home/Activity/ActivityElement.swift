@@ -15,11 +15,14 @@ struct ActivityElement: ReducerProtocol {
     }
     
     enum Action: Equatable {
-        
+        case activitySelected
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        
+        switch action {
+        case .activitySelected:
+            return .none
+        }
     }
 }
 

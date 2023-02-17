@@ -15,22 +15,18 @@ struct HomeScreen: View {
         WithViewStore(store) { viewStore in
             VStack(spacing: 0) {
                 HStack(alignment: .top, spacing: 0) {
-                    ActivityListView(store: store.scope(state: \.activityList, action: Home.Action.activityList))
+                    ActivitiesView(store: store.scope(state: \.activityList, action: Home.Action.activityList))
                     Spacer()
                         .frame(maxWidth: .infinity)
-                    PlayerHubView(store: store.scope(state: \.playerHub, action: Home.Action.playerHub))
+                    ProfileView(store: store.scope(state: \.profile, action: Home.Action.profile))
                 }
                 
                 Text(viewStore.state.text)
-
-                Button("Get Activity HeartStream") {
-                    viewStore.send(.getActivityHeartRateStreamTapped)
-                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .onAppear {
                 viewStore.send(.onAppearance)
             }
         }
-    } 
+    }
 }

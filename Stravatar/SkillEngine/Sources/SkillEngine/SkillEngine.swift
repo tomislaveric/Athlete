@@ -1,19 +1,17 @@
+import Foundation
+
 public protocol SkillEngine {
-    func setup(zone1: Range<Int>, zone2: Range<Int>, zone3: Range<Int>, zone4: Range<Int>, zone5: Range<Int>)
+    typealias SEZoneType = ZoneType
+    
+    func setup(zones: [Zone])
     func getPointsFor(heartRate: Int) -> Int
 }
 
 public class SkillEngineImpl: SkillEngine {
     public init() {}
     
-    public func setup(zone1: Range<Int>, zone2: Range<Int>, zone3: Range<Int>, zone4: Range<Int>, zone5: Range<Int>) {
-        self.userZones = [
-            Zone(range: zone1, type: .zone1),
-            Zone(range: zone2, type: .zone2),
-            Zone(range: zone3, type: .zone3),
-            Zone(range: zone4, type: .zone4),
-            Zone(range: zone5.lowerBound..<Int.max, type: .zone5)
-        ]
+    public func setup(zones: [Zone]) {
+        self.userZones = zones
     }
     
     public func getPointsFor(heartRate: Int) -> Int {
@@ -31,21 +29,32 @@ public class SkillEngineImpl: SkillEngine {
         case .zone3: return 300
         case .zone4: return 400
         case .zone5: return 500
+        case .none: return 0
         }
     }
     
     private var userZones: [Zone]?
 }
 
-struct Zone {
-    let range: Range<Int>
-    let type: ZoneType
+public struct Zone: Equatable, Identifiable {
+    public var id: Int = UUID().hashValue
+    public let range: Range<Int>
+    public let type: ZoneType
+    
+    public init(range: Range<Int>, type: ZoneType) {
+        self.range = range
+        self.type = type
+    }
 }
 
-enum ZoneType {
+public enum ZoneType: String, Equatable, Identifiable {
+    public var id: Self {
+        return self
+    }
     case zone1
     case zone2
     case zone3
     case zone4
     case zone5
+    case none
 }
