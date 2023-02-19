@@ -34,9 +34,8 @@ struct ActivitiesLogic: ReducerProtocol {
                         try await stravaApi.getActivities()
                     })
                 }
-            case .handleActivitiesResponse(.success(let response)):
+            case .handleActivitiesResponse(.success(let activities)):
                 state.isLoading = false
-                let activities = response.map { Activity(id: $0.id, name: $0.name) }
                 return .init(value: .setActivities(activities))
             case .handleActivitiesResponse(.failure(let error)):
                 state.isLoading = false

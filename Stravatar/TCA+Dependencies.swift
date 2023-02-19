@@ -66,11 +66,11 @@ extension StravaUseCase: DependencyKey {
         },
         getActivities: {
             let activities = try await api.getAthleteDetailedActivities()
-            return activities.map { Activity(id: $0.id, name: $0.name) }
+            return activities.map { Activity(id: $0.id, name: $0.name, duration: $0.elapsed_time) }
         },
         getAthleteZones: {
             let zone = try await api.getAthleteZones()
-            guard let zones = zone.heart_rate?.zones, let ranges = mapHeartRateZones(zoneRanges: zones) else {
+            guard let zones = zone.heart_rate?.zones, let ranges = try mapHeartRateZones(zoneRanges: zones) else {
                 throw StravaError.couldNotMap
             }
             return ranges
@@ -83,22 +83,22 @@ extension StravaUseCase: DependencyKey {
         }
     )
     
-    static func mapHeartRateZones(zoneRanges: [ZoneRange]) -> [Zone]? {
-        return zoneRanges.enumerated().compactMap { index, element in
+    static func mapHeartRateZones(zoneRanges: [ZoneRange]) throws -> [Zone]? {
+        return try zoneRanges.enumerated().compactMap { index, element in
             if let min = element.min, let max = element.max {
-                return Zone(range: min..<(max < min ? Int.max : max), type: getZoneType(by: index))
+                return Zone(range: min..<(max < min ? Int.max : max), type: try getZoneType(by: index))
             }
             return nil
         }
         
-        func getZoneType(by index: Int) -> SkillEngine.SEZoneType {
+        func getZoneType(by index: Int) throws -> SkillEngine.SEZoneType {
             switch index {
             case 0: return .zone1
             case 1: return .zone2
             case 2: return .zone3
             case 3: return .zone4
             case 4: return .zone5
-            default: return .none
+            default: throw StravaError.zoneOutOfRange
             }
         }
     }
@@ -106,4 +106,5 @@ extension StravaUseCase: DependencyKey {
 
 enum StravaError: Error {
     case couldNotMap
+    case zoneOutOfRange
 }

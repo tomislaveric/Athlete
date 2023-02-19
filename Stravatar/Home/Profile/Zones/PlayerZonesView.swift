@@ -14,11 +14,11 @@ struct PlayerZonesView: View {
     let store: StoreOf<PlayerZonesLogic>
     
     private let placeholderZones = [
-        Zone(range: 0..<1, type: .none),
-        Zone(range: 0..<1, type: .none),
-        Zone(range: 0..<1, type: .none),
-        Zone(range: 0..<1, type: .none),
-        Zone(range: 0..<1, type: .none)
+        Zone(range: 0..<1, type: .zone1),
+        Zone(range: 0..<1, type: .zone2),
+        Zone(range: 0..<1, type: .zone3),
+        Zone(range: 0..<1, type: .zone4),
+        Zone(range: 0..<1, type: .zone5)
     ]
     
     var body: some View {

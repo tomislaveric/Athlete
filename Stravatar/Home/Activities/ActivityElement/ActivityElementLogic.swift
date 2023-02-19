@@ -7,12 +7,13 @@
 
 import ComposableArchitecture
 import Foundation
+import SkillEngine
 
 struct ActivityElementLogic: ReducerProtocol {
     struct State: Equatable, Identifiable {
         var id: Int
-        var name: String?        
-        var points: String?
+        var name: String?
+        var skills: [Skill] = []
         var isLoading = true
     }
     
@@ -41,7 +42,7 @@ struct ActivityElementLogic: ReducerProtocol {
             }
         case .handleHeartRateResponse(.success(let response)):
             state.isLoading = false
-            state.points = "\(response.data.map { skillEngine.getPointsFor(heartRate: $0) }.reduce(0, +))"
+            state.skills = skillEngine.getSkillsFor(heartRates: response.data)
             return .none
         case .handleHeartRateResponse(.failure):
             state.isLoading = false

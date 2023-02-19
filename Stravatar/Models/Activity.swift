@@ -10,4 +10,5 @@ import Foundation
 struct Activity: Equatable, Identifiable {
     let id: Int?
     let name: String?
+    let duration: Int?
 }
