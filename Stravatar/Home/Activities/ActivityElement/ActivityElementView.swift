@@ -15,19 +15,15 @@ struct ActivityElementView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack(alignment: .leading) {
-                Text(viewStore.name ?? "Activity Name")
+                Text(viewStore.activity.name ?? "Activity Name")
                 HStack {
                     ForEach(viewStore.skills) {
                         Text("\($0.zoneType.rawValue): \($0.points)")
                     }
                 }
             }
-            .redacted(reason: viewStore.isLoading ? .placeholder : [])
             .onTapGesture {
                 viewStore.send(.activitySelected)
-            }
-            .onAppear {
-                viewStore.send(.viewAppeared)
             }
         }
     }

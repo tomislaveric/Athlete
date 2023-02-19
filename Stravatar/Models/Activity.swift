@@ -8,7 +8,12 @@
 import Foundation
 
 struct Activity: Equatable, Identifiable {
-    let id: Int?
+    let id: Int
     let name: String?
-    let duration: Int?
+    let duration: Int
+    let heartRateTicks: [Int]
+    
+    var timeSample: Double? {
+        Double(duration/heartRateTicks.count)
+    }
 }

@@ -33,9 +33,8 @@ extension DependencyValues {
 public struct StravaUseCase {
     var registerTokenUpdate: () async throws -> Void
     var getProfile: () async throws -> Profile
-    var getActivities: () async throws -> [Activity]
+    var getActivities: (_ amount: Int) async throws -> [Activity]
     var getAthleteZones: () async throws -> [Zone]
-    var getActivityHeartRateStream: (_ id: Int) async throws -> ActivityHeartRate
 }
 
 extension StravaUseCase: DependencyKey {
@@ -64,9 +63,24 @@ extension StravaUseCase: DependencyKey {
             let athlete = try await api.getDetailedAthlete()
             return Profile(name: athlete.firstname)
         },
-        getActivities: {
-            let activities = try await api.getAthleteDetailedActivities()
-            return activities.map { Activity(id: $0.id, name: $0.name, duration: $0.elapsed_time) }
+        getActivities: { amount in
+            let activities = try await api.getAthleteDetailedActivities(perPage: amount)
+            
+            var mappedActivities: [Activity] = []
+            for activity in activities {
+                let stream = try await api.getActivityStreams(by: activity.id, keys: [.heartrate])
+                let mappedActivity = Activity(
+                    id: activity.id,
+                    name: activity.name,
+                    duration: activity.elapsed_time ?? 0,
+                    heartRateTicks: stream.heartrate?.data?.compactMap { Int($0) } ?? []
+                )
+                
+                if !mappedActivities.contains(mappedActivity) {
+                    mappedActivities.append(mappedActivity)
+                }
+            }
+            return mappedActivities
         },
         getAthleteZones: {
             let zone = try await api.getAthleteZones()
@@ -74,12 +88,6 @@ extension StravaUseCase: DependencyKey {
                 throw StravaError.couldNotMap
             }
             return ranges
-        },
-        getActivityHeartRateStream: { id in
-            guard let data = try await api.getActivityStreams(by: id, keys: [.heartrate, .time]).heartrate?.data else {
-                throw StravaError.couldNotMap
-            }
-            return ActivityHeartRate(data: data.map { Int($0) })
         }
     )
     

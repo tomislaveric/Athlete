@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import Foundation
+import SkillEngine
 
 struct ActivitiesLogic: ReducerProtocol {
     
@@ -24,14 +25,16 @@ struct ActivitiesLogic: ReducerProtocol {
     }
     
     @Dependency(\.stravaApi) var stravaApi
+    @Dependency(\.skillEngine) var skillEngine
     
     var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
             case .fetchActivities:
+                let amount = state.amountOfActivities
                 return .task {
                     await .handleActivitiesResponse(TaskResult {
-                        try await stravaApi.getActivities()
+                        try await stravaApi.getActivities(amount)
                     })
                 }
             case .handleActivitiesResponse(.success(let activities)):
@@ -46,7 +49,7 @@ struct ActivitiesLogic: ReducerProtocol {
             case .setActivities(let activities):
                 guard let activities = activities?.prefix(state.amountOfActivities) else { return .none }
                 state.activities = IdentifiedArrayOf(uniqueElements: activities.map {
-                    ActivityElementLogic.State(id: $0.id ?? UUID().hashValue, name: $0.name)
+                    ActivityElementLogic.State(id: UUID().hashValue, activity: $0, skills: skillEngine.getSkillsFor(heartRates: $0.heartRateTicks))
                 })
                 return .none
             }
