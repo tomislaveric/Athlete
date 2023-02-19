@@ -17,7 +17,7 @@ struct ActivityElementView: View {
             VStack(alignment: .leading) {
                 Text(viewStore.activity.name ?? "Activity Name")
                 HStack {
-                    ForEach(viewStore.skills) {
+                    ForEach(viewStore.skills, id: \.zoneType) {
                         Text("\($0.zoneType.rawValue): \($0.points)")
                     }
                 }

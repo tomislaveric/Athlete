@@ -2,31 +2,16 @@ import XCTest
 @testable import SkillEngine
 
 final class SkillEngineTests: XCTestCase {
-//    func test_zones_shouldReturn_correctValues() throws {
-//        
-//        let sut = createSUT()
-//        let pointsZone1 = sut.getPointsFor(heartRate: 77)
-//        let pointsZone2 = sut.getPointsFor(heartRate: 138)
-//        let pointsZone3 = sut.getPointsFor(heartRate: 160)
-//        let pointsZone4 = sut.getPointsFor(heartRate: 188)
-//        let pointsZone5 = sut.getPointsFor(heartRate: 250)
-//        
-//        XCTAssertEqual(pointsZone1, 100)
-//        XCTAssertEqual(pointsZone2, 200)
-//        XCTAssertEqual(pointsZone3, 300)
-//        XCTAssertEqual(pointsZone4, 400)
-//        XCTAssertEqual(pointsZone5, 500)
-//    }
-    
+
     func test_heartRates_shouldReturn_mappedSkills() {
         let sut = createSUT()
         let skills = sut.getSkillsFor(heartRates: [150, 160, 120, 110], timeSample: 2.5)
         let expected = [
-            Skill(points: 575, zoneType: .zone1),
-            Skill(points: 375, zoneType: .zone2),
-            Skill(points: 400, zoneType: .zone3),
-            Skill(points: 0, zoneType: .zone4),
-            Skill(points: 0, zoneType: .zone5)
+            Skill(points: 575.0, zoneType: .zone1),
+            Skill(points: 375.0, zoneType: .zone2),
+            Skill(points: 400.0, zoneType: .zone3),
+            Skill(points: 0.0, zoneType: .zone4),
+            Skill(points: 0.0, zoneType: .zone5)
         ]
         XCTAssertEqual(skills, expected)
     }

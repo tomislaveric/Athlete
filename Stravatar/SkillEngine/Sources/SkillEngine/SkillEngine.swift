@@ -4,7 +4,7 @@ public protocol SkillEngine {
     typealias SEZoneType = ZoneType
     
     func setup(zones: [Zone])
-    func getSkillsFor(heartRates: [Int], timeSample: Double) -> [Skill]
+    func getSkillsFor(heartRates: [Int], timeSample: Double?) -> [Skill]
 }
 
 public extension SkillEngine {
@@ -14,18 +14,20 @@ public extension SkillEngine {
 }
 
 public class SkillEngineImpl: SkillEngine {
-    public func getSkillsFor(heartRates: [Int], timeSample: Double) -> [Skill] {
-        
+    public func getSkillsFor(heartRates: [Int], timeSample: Double?) -> [Skill] {
         return ZoneType.allCases.map { zone in
-            Skill(points: Double(heartRates.filter { getHrZoneType(heartRate: $0) == zone }.reduce(0) { ($0+$1*Int(timeSample)) }), zoneType: zone)
+            Skill(points: heartRates
+                .filter { getHrZoneType(heartRate: $0) == zone }
+                .map { Double($0) }
+                .reduce(0) {
+                    ($0+$1*(timeSample ?? 1) )}, zoneType: zone)
         }
     }
-    
-    public init() {}
-    
     public func setup(zones: [Zone]) {
         self.userZones = zones
     }
+    
+    public init() {}
     
     private func getHrZoneType(heartRate: Int) -> ZoneType? {
         guard let zoneType = self.userZones?.first(where: { $0.range.contains(heartRate) })?.type else {
@@ -37,8 +39,7 @@ public class SkillEngineImpl: SkillEngine {
     private var userZones: [Zone]?
 }
 
-public struct Skill: Equatable, Identifiable {
-    public var id = UUID().hashValue
+public struct Skill: Equatable {
     public let points: Double
     public let zoneType: ZoneType
 }

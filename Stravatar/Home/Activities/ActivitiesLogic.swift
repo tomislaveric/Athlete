@@ -49,7 +49,14 @@ struct ActivitiesLogic: ReducerProtocol {
             case .setActivities(let activities):
                 guard let activities = activities?.prefix(state.amountOfActivities) else { return .none }
                 state.activities = IdentifiedArrayOf(uniqueElements: activities.map {
-                    ActivityElementLogic.State(id: UUID().hashValue, activity: $0, skills: skillEngine.getSkillsFor(heartRates: $0.heartRateTicks))
+                    let activity = $0
+                    return ActivityElementLogic.State(
+                        id: UUID().hashValue,
+                        activity: activity,
+                        skills: skillEngine.getSkillsFor(
+                            heartRates: activity.heartRateTicks,
+                            timeSample: activity.timeSample)
+                    )
                 })
                 return .none
             }
