@@ -55,7 +55,7 @@ struct ActivitiesLogic: ReducerProtocol {
                         activity: activity,
                         skills: skillEngine.getSkillsFor(
                             heartRates: activity.heartRateTicks,
-                            timeSample: activity.timeSample)
+                            timeSample: activity.timeSample ?? 0)
                     )
                 })
                 return .none

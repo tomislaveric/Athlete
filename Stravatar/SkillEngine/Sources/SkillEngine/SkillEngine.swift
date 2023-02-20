@@ -4,7 +4,7 @@ public protocol SkillEngine {
     typealias SEZoneType = ZoneType
     
     func setup(zones: [Zone])
-    func getSkillsFor(heartRates: [Int], timeSample: Double?) -> [Skill]
+    func getSkillsFor(heartRates: [Int], timeSample: Double) -> [Skill]
 }
 
 public extension SkillEngine {
@@ -14,9 +14,9 @@ public extension SkillEngine {
 }
 
 public class SkillEngineImpl: SkillEngine {
-    public func getSkillsFor(heartRates: [Int], timeSample: Double?) -> [Skill] {
+    public func getSkillsFor(heartRates: [Int], timeSample: Double) -> [Skill] {
         return ZoneType.allCases.map { zone in
-            Skill(points: getTimeSpent(in: zone, for: heartRates),
+            Skill(points: getTimeSpent(in: zone, for: heartRates, timeSample: timeSample),
                   zoneType: zone)
         }
     }
