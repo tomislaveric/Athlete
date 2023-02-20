@@ -16,18 +16,20 @@ public extension SkillEngine {
 public class SkillEngineImpl: SkillEngine {
     public func getSkillsFor(heartRates: [Int], timeSample: Double?) -> [Skill] {
         return ZoneType.allCases.map { zone in
-            Skill(points: heartRates
-                .filter { getHrZoneType(heartRate: $0) == zone }
-                .map { Double($0) }
-                .reduce(0) {
-                    ($0+$1*(timeSample ?? 1) )}, zoneType: zone)
+            Skill(points: getTimeSpent(in: zone, for: heartRates),
+                  zoneType: zone)
         }
     }
+    
     public func setup(zones: [Zone]) {
         self.userZones = zones
     }
     
     public init() {}
+    
+    private func getTimeSpent(in zone: ZoneType, for heartRates: [Int], timeSample: Double = 1) -> Double {
+        Double(heartRates.filter { getHrZoneType(heartRate: $0) == zone }.count) * timeSample
+    }
     
     private func getHrZoneType(heartRate: Int) -> ZoneType? {
         guard let zoneType = self.userZones?.first(where: { $0.range.contains(heartRate) })?.type else {
