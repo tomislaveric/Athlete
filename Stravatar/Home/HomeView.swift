@@ -9,23 +9,37 @@ import SwiftUI
 import ComposableArchitecture
 
 struct HomeView: View {
-    let store: StoreOf<HomeLogic>
-
+    @ObservedObject
+    private var viewStore: ViewStoreOf<HomeLogic>
+    private let store: StoreOf<HomeLogic>
+    
+    init(store: StoreOf<HomeLogic>) {
+        self.viewStore = ViewStore(store)
+        self.store = store
+    }
+    
     var body: some View {
-        WithViewStore(store) { viewStore in
-            VStack(spacing: 0) {
-                HStack(alignment: .top, spacing: 0) {
-                    
+       
+        HStack{
+            
+            VStack(alignment: .leading) {
+                ProfileView(store: store.scope(state: \.profile, action: HomeLogic.Action.profile))
+                PlayerZonesView(store: store.scope(state: \.playerZones, action: HomeLogic.Action.playerZones))
+                ActivitiesView(store: store.scope(state: \.activityList, action: HomeLogic.Action.activityList))
+                Spacer()
+            }
+            
+            VStack {
+                HStack(alignment: .top) {
+                    AvatarView(store: store.scope(state: \.avatar, action: HomeLogic.Action.avatar))
                     SkillsHudView(store: store.scope(state: \.skillsHud, action: HomeLogic.Action.skillsHud))
-                    ProfileView(store: store.scope(state: \.profile, action: HomeLogic.Action.profile))
                 }
-                
-                Text(viewStore.state.text)
+                Spacer()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .onAppear {
-                viewStore.send(.onAppearance)
-            }
+            
+        }
+        .onAppear {
+            viewStore.send(.onAppearance)
         }
     }
 }

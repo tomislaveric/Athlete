@@ -10,16 +10,27 @@ import SwiftUI
 import ComposableArchitecture
 
 struct SkillsHudView: View {
-    let store: StoreOf<SkillsHudLogic>
+    @ObservedObject
+    private var viewStore: ViewStoreOf<SkillsHudLogic>
+    
+    init(store: StoreOf<SkillsHudLogic>) {
+        self.viewStore = ViewStore(store)
+    }
     
     var body: some View {
-        WithViewStore(store) { viewStore in
-            VStack {
-                ForEach(viewStore.playerSkills) {
-                    Text("\($0.zoneType.rawValue) - \($0.points)")
-                    ProgressView(value: $0.points, total: 1000000)
+        GroupBox {
+            VStack(alignment: .leading) {
+                Text("Skills")
+                    .bold()
+                Divider()
+                ForEach(viewStore.playerSkills) { skill in
+                    HStack {
+                        Text("\(skill.name)")
+                        Text(String(format: "%.0f", skill.points))
+                    }
                 }
             }
+            
         }
     }
 }

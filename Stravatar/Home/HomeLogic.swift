@@ -15,13 +15,18 @@ struct HomeLogic: ReducerProtocol {
     struct State: Equatable {
         var profile: ProfileLogic.State
         var skillsHud: SkillsHudLogic.State
+        var avatar: AvatarLogic.State
+        var playerZones: PlayerZonesLogic.State
+        var activityList = ActivitiesLogic.State()
         var text: String = ""
     }
     
     enum Action: Equatable {
         case profile(ProfileLogic.Action)
         case skillsHud(SkillsHudLogic.Action)
-        
+        case avatar(AvatarLogic.Action)
+        case activityList(ActivitiesLogic.Action)
+        case playerZones(PlayerZonesLogic.Action)
         case onAppearance
         case handleAthleteResponse(TaskResult<Profile>)
     }
@@ -37,9 +42,17 @@ struct HomeLogic: ReducerProtocol {
         Scope(state: \.skillsHud, action: /Action.skillsHud) {
             SkillsHudLogic()
         }
+        Scope(state: \.avatar, action: /Action.avatar) {
+            AvatarLogic()
+        }
+        Scope(state: \.activityList, action: /Action.activityList) {
+            ActivitiesLogic()
+        }
+        Scope(state: \.playerZones, action: /Action.playerZones) {
+            PlayerZonesLogic()
+        }
         Reduce { state, action in
             switch action {
-                
             case .onAppearance:
                 return .concatenate(
                     .fireAndForget {
@@ -49,10 +62,14 @@ struct HomeLogic: ReducerProtocol {
                         await .handleAthleteResponse(TaskResult {
                             try await stravaApi.getProfile()
                         })
-                    }
+                    },
+                    .task { .activityList(.fetchActivities) }
                 )
             case .handleAthleteResponse(.success(let profile)):
-                return .task { .profile(.profileFetched(profile)) }
+                return .merge(
+                    .task { .profile(.profileFetched(profile)) },
+                    .task { .playerZones(.profileFetched) }
+                )
             case .profile(let action):
                 switch action {
                 case .updateSkills:
@@ -62,7 +79,13 @@ struct HomeLogic: ReducerProtocol {
             case .handleAthleteResponse(.failure(let error)):
                 dump(error)
                 return .none
-            case .skillsHud:
+            case .activityList(let action):
+                switch action {
+                case .skillsEarned:
+                    return .task { .skillsHud(.updateHud) }
+                default: return .none
+                }
+            case .skillsHud, .avatar, .playerZones:
                 return .none
             }
         }

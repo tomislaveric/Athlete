@@ -23,10 +23,15 @@ struct PlayerZonesView: View {
     
     var body: some View {
         WithViewStore(store) { viewStore in
-            Group {
-                ForEach(viewStore.hrZones ?? placeholderZones) { zone in
-                    ZoneView(type: zone.type, range: zone.range)
-                }.redacted(reason: viewStore.isLoading ? .placeholder : [])
+            GroupBox {
+                VStack(alignment: .leading) {
+                    Text("Zones")
+                        .bold()
+                    Divider()
+                    ForEach(viewStore.hrZones ?? placeholderZones) { zone in
+                        ZoneView(type: zone.type, range: zone.range)
+                    }.redacted(reason: viewStore.isLoading ? .placeholder : [])
+                }
             }
         }
     }

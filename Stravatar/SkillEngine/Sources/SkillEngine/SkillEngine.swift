@@ -62,6 +62,16 @@ public struct Skill: Equatable, Identifiable {
     public var id: Int = UUID().hashValue
     public let points: Double
     public let zoneType: ZoneType
+    
+    public var name: String {
+        switch zoneType {
+        case .zone1: return "💡"
+        case .zone2: return "⚖️"
+        case .zone3: return "🏃‍♂️"
+        case .zone4: return "💨"
+        case .zone5: return "💪"
+        }
+    }
 }
 
 public struct Zone: Equatable, Identifiable {
