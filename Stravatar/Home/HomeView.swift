@@ -15,9 +15,8 @@ struct HomeView: View {
         WithViewStore(store) { viewStore in
             VStack(spacing: 0) {
                 HStack(alignment: .top, spacing: 0) {
-                    ActivitiesView(store: store.scope(state: \.activityList, action: HomeLogic.Action.activityList))
-                    Spacer()
-                        .frame(maxWidth: .infinity)
+                    
+                    SkillsHudView(store: store.scope(state: \.skillsHud, action: HomeLogic.Action.skillsHud))
                     ProfileView(store: store.scope(state: \.profile, action: HomeLogic.Action.profile))
                 }
                 

@@ -14,18 +14,14 @@ struct HomeLogic: ReducerProtocol {
     
     struct State: Equatable {
         var profile: ProfileLogic.State
-        var activityList: ActivitiesLogic.State
-        
+        var skillsHud: SkillsHudLogic.State
         var text: String = ""
-        var activities: [Activity] = []
-        var firstActivityId: Int? {
-            activities.first?.id
-        }
     }
     
     enum Action: Equatable {
         case profile(ProfileLogic.Action)
-        case activityList(ActivitiesLogic.Action)
+        case skillsHud(SkillsHudLogic.Action)
+        
         case onAppearance
         case handleAthleteResponse(TaskResult<Profile>)
     }
@@ -38,8 +34,8 @@ struct HomeLogic: ReducerProtocol {
         Scope(state: \.profile, action: /Action.profile) {
             ProfileLogic()
         }
-        Scope(state: \.activityList, action: /Action.activityList) {
-            ActivitiesLogic()
+        Scope(state: \.skillsHud, action: /Action.skillsHud) {
+            SkillsHudLogic()
         }
         Reduce { state, action in
             switch action {
@@ -53,17 +49,20 @@ struct HomeLogic: ReducerProtocol {
                         await .handleAthleteResponse(TaskResult {
                             try await stravaApi.getProfile()
                         })
-                    },
-                    .init(value: .activityList(.fetchActivities))
+                    }
                 )
             case .handleAthleteResponse(.success(let profile)):
-                return .init(value: .profile(.profileFetched(profile)))
-            case .profile:
-                return .none
-            case .activityList:
-                return .none
+                return .task { .profile(.profileFetched(profile)) }
+            case .profile(let action):
+                switch action {
+                case .updateSkills:
+                    return .task { .skillsHud(.updateHud) }
+                default: return .none
+                }
             case .handleAthleteResponse(.failure(let error)):
                 dump(error)
+                return .none
+            case .skillsHud:
                 return .none
             }
         }

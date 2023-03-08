@@ -14,6 +14,9 @@ struct Activity: Equatable, Identifiable {
     let heartRateTicks: [Int]
     
     var timeSample: Double? {
-        Double(duration/heartRateTicks.count)
+        guard heartRateTicks.count != 0 else {
+            return nil
+        }
+        return Double(duration/heartRateTicks.count)
     }
 }

@@ -11,21 +11,21 @@ import SkillEngine
 
 struct ActivityElementLogic: ReducerProtocol {
     struct State: Equatable, Identifiable {
-        let id: Int
+        let id = UUID()
         let activity: Activity
-        let skills: [Skill]
     }
     
     enum Action: Equatable {
-        case activitySelected
+        case elementTapped
+        case selected(activity: Activity)
     }
-    
-    @Dependency(\.stravaApi) var stravaApi
-    @Dependency(\.skillEngine) var skillEngine
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
-        case .activitySelected:
+        case .elementTapped:
+            let activity = state.activity
+            return .task { .selected(activity: activity) }
+        case .selected:
             return .none
         }
     }

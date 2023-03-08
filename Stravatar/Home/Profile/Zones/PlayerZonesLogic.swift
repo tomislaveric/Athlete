@@ -27,7 +27,7 @@ struct PlayerZonesLogic: ReducerProtocol {
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .profileFetched:
-            return .init(value: .fetchHeartRateZones)
+            return .task { .fetchHeartRateZones }
         case .fetchHeartRateZones:
             return .task {
                 await .handleHeartRateZonesResponse(TaskResult {
@@ -36,7 +36,7 @@ struct PlayerZonesLogic: ReducerProtocol {
             }
         case .handleHeartRateZonesResponse(.success(let zones)):
             state.isLoading = false
-            return .init(value: .setHRzones(zones))
+            return .task { .setHRzones(zones) }
         case .handleHeartRateZonesResponse(.failure):
             state.isLoading = false
             return .none

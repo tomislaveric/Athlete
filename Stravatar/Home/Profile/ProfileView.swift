@@ -26,7 +26,12 @@ struct ProfileView: View {
                     }
                     
                     PlayerZonesView(
-                        store: store.scope(state: \.playerZones, action: ProfileLogic.Action.playerZones))
+                        store: store.scope(state: \.playerZones, action: ProfileLogic.Action.playerZones)
+                    )
+                    Divider()
+                    ActivitiesView(
+                        store: store.scope(state: \.activityList, action: ProfileLogic.Action.activityList)
+                    )
                 }
             }
         }
