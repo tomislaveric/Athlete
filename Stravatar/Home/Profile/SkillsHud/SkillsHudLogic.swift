@@ -24,6 +24,7 @@ struct SkillsHudLogic: ReducerProtocol {
         switch action {
         case .updateHud:
             state.playerSkills = skillEngine.getPlayerSkills()
+                .filter { $0.zoneType != .zone1 }
             return .none
         }
     }

@@ -11,7 +11,12 @@ import SwiftUI
 import SkillEngine
 
 struct PlayerZonesView: View {
-    let store: StoreOf<PlayerZonesLogic>
+    @ObservedObject
+    private var viewStore: ViewStoreOf<PlayerZonesLogic>
+    
+    init(store: StoreOf<PlayerZonesLogic>) {
+        self.viewStore = ViewStore(store)
+    }
     
     private let placeholderZones = [
         Zone(range: 0..<1, type: .zone1),
@@ -22,16 +27,14 @@ struct PlayerZonesView: View {
     ]
     
     var body: some View {
-        WithViewStore(store) { viewStore in
-            GroupBox {
-                VStack(alignment: .leading) {
-                    Text("Zones")
-                        .bold()
-                    Divider()
-                    ForEach(viewStore.hrZones ?? placeholderZones) { zone in
-                        ZoneView(type: zone.type, range: zone.range)
-                    }.redacted(reason: viewStore.isLoading ? .placeholder : [])
-                }
+        GroupBox {
+            VStack(alignment: .leading) {
+                Text("Zones")
+                    .bold()
+                Divider()
+                ForEach(viewStore.hrZones ?? placeholderZones) { zone in
+                    ZoneView(type: zone.type, range: zone.range)
+                }.redacted(reason: viewStore.isLoading ? .placeholder : [])
             }
         }
     }

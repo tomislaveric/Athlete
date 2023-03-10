@@ -41,7 +41,7 @@ struct PlayerZonesLogic: ReducerProtocol {
             state.isLoading = false
             return .none
         case .setHRzones(let zones):
-            state.hrZones = zones
+            state.hrZones = zones.filter { $0.type != .zone1 }
             skillEngine.setup(zones: zones)
             state.isLoading = false
             return .none
