@@ -16,12 +16,6 @@ struct ActivityElementView: View {
         WithViewStore(store) { viewStore in
             VStack(alignment: .leading) {
                 Text(viewStore.activity.name ?? String(.placeholder))
-                
-                HStack {
-//                    ForEach(viewStore.skills, id: \.zoneType) {
-//                        Text("\($0.zoneType.rawValue): \($0.points)")
-//                    }
-                }
             }
             .onTapGesture {
                 viewStore.send(.elementTapped)

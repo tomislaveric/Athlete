@@ -9,8 +9,10 @@
 "skills_hud_title" = "Skills";
 "player_heartrate_zones_title" = "Heartrate Zones";
 "player_heartrate_zones_description" = "Train in this heartrate zones to increase your skills";
-"strava_profile_name" = "Strava Profile";
 "activities_title" = "Latest Activities";
+
+//Strava
+"strava_profile_title" = "Strava Profile";
 
 //Avatar Info
 "avatar_info_title" = "Character info";
@@ -22,4 +24,5 @@
 "avatar_creation_name_input_placeholder" = "Super nice character name";
 "avatar_creation_button_title" = "Save Character";
 
+//Generics
 "placeholder" = "Placeholder";

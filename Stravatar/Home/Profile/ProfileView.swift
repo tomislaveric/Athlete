@@ -22,7 +22,7 @@ struct ProfileView: View {
     var body: some View {
         GroupBox {
             VStack(alignment: .leading) {
-                Text(String(.profileTitle))
+                Text(String(.stravaProfileTitle))
                     .bold()
                 Divider()
                 Text(viewStore.state.playerName ?? String(.placeholder))

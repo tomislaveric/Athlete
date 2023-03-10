@@ -11,8 +11,10 @@ enum LocalizationKey: String {
     case playerHRzonesTitle = "player_heartrate_zones_title"
     case playerHRzonesDescription = "player_heartrate_zones_description"
     case skillsHudTitle = "skills_hud_title"
-    case profileTitle = "profile_title"
     case activitiesTitle = "activities_title"
+    
+    //MARK: Strava
+    case stravaProfileTitle = "strava_profile_title"
     
     //MARK: Avatar Info
     case avatarInfoTitle = "avatar_info_title"

@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol PlayerEngine {
-    typealias SEZoneType = ZoneType
+    typealias PlayerZoneType = ZoneType
     
     func setup(zones: [Zone])
     func getSkillsFor(heartRates: [Int], timeSample: Double) -> [Skill]
