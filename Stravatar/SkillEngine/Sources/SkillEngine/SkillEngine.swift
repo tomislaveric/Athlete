@@ -9,12 +9,6 @@ public protocol SkillEngine {
     func getPlayerSkills() -> [Skill]
 }
 
-public extension SkillEngine {
-    func getSkillsFor(heartRates: [Int]) -> [Skill] {
-        getSkillsFor(heartRates: heartRates, timeSample: 1)
-    }
-}
-
 public class SkillEngineImpl: SkillEngine {
     private var playerSkills: [Skill] = []
     
@@ -58,39 +52,11 @@ public class SkillEngineImpl: SkillEngine {
     private var userZones: [Zone]?
 }
 
-public struct Skill: Equatable, Identifiable {
-    public var id: Int = UUID().hashValue
-    public let points: Double
-    public let zoneType: ZoneType
-}
+//MARK: Default implementations
 
-public struct Zone: Equatable, Identifiable {
-    public var id: Int = UUID().hashValue
-    public let range: Range<Int>
-    public let type: ZoneType
-    
-    public init(range: Range<Int>, type: ZoneType) {
-        self.range = range
-        self.type = type
+public extension SkillEngine {
+    func getSkillsFor(heartRates: [Int]) -> [Skill] {
+        getSkillsFor(heartRates: heartRates, timeSample: 1)
     }
 }
 
-public enum ZoneType: String, Equatable, Identifiable, CaseIterable {
-    public var id: Self {
-        return self
-    }
-    public var name: String {
-        switch self {
-        case .zone1: return ""
-        case .zone2: return "Health"
-        case .zone3: return "Endurance"
-        case .zone4: return "Speed"
-        case .zone5: return "Strength"
-        }
-    }
-    case zone1
-    case zone2
-    case zone3
-    case zone4
-    case zone5
-}

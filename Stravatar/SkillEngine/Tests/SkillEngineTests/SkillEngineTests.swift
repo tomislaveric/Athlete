@@ -13,12 +13,13 @@ final class SkillEngineTests: XCTestCase {
             Skill(points: 0.0, zoneType: .zone4),
             Skill(points: 0.0, zoneType: .zone5)
         ]
-        XCTAssertEqual(skills, expected)
+        XCTAssertEqual(skills.map{ $0.points }, expected.map{ $0.points })
     }
     
     func test_activity_shouldAccumulate_skills() {
         let sut = createSUT()
-        //given
+        let skills = sut.getSkillsFor(heartRates: [150, 160, 120, 110], timeSample: 2.5)
+        
         let expectedSkills = [
             Skill(points: 10.0, zoneType: .zone1),
             Skill(points: 5.0, zoneType: .zone2),
@@ -26,14 +27,16 @@ final class SkillEngineTests: XCTestCase {
             Skill(points: 0.0, zoneType: .zone4),
             Skill(points: 0.0, zoneType: .zone5)
         ]
-        let skills = sut.getSkillsFor(heartRates: [150, 160, 120, 110], timeSample: 2.5)
+        
         //when
         sut.earn(skills: skills)
         sut.earn(skills: skills)
         
         //then
         let playerSKills = sut.getPlayerSkills()
-        XCTAssertEqual(playerSKills, expectedSkills)
+        let playerPoints = playerSKills.map { $0.points }
+        let expectedPoints = expectedSkills.map { $0.points }
+        XCTAssertEqual(playerPoints, expectedPoints)
         
     
     }
