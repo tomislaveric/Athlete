@@ -7,7 +7,7 @@ public protocol PlayerEngine {
     func getSkillsFor(heartRates: [Int], timeSample: Double) -> [Skill]
     
     func getPlayer() -> Player?
-    func createPlayer(name: String)
+    func createPlayer(name: String) -> Player
     func update(skills: [Skill])
     func update(age: Int)
     func update(name: String)
@@ -32,8 +32,15 @@ public class PlayerEngineImpl: PlayerEngine {
         updatePlayer(skills: skills)
     }
     
-    public func createPlayer(name: String) {
-        self.player = Player(name: name)
+    public func createPlayer(name: String) -> Player {
+        let player = Player(name: name, skills: [
+            Skill(points: 0, zoneType: .zone2),
+            Skill(points: 0, zoneType: .zone3),
+            Skill(points: 0, zoneType: .zone4),
+            Skill(points: 0, zoneType: .zone5)
+        ])
+        self.player = player
+        return player
     }
     
     public func getPlayer() -> Player? {

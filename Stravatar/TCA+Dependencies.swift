@@ -19,14 +19,14 @@ extension DependencyValues {
         set { self[StravaUseCase.self] = newValue }
     }
     
-    private enum SkillEngineKey: DependencyKey {
-        typealias Value = SkillEngine
-        static let liveValue: SkillEngine = SkillEngineImpl()
+    private enum PlayerEngineKey: DependencyKey {
+        typealias Value = PlayerEngine
+        static let liveValue: PlayerEngine = PlayerEngineImpl()
     }
     
-    var skillEngine: SkillEngine {
-        get { self[SkillEngineKey.self] }
-        set { self[SkillEngineKey.self] = newValue }
+    var playerEngine: PlayerEngine {
+        get { self[PlayerEngineKey.self] }
+        set { self[PlayerEngineKey.self] = newValue }
     }
 }
 
@@ -99,7 +99,7 @@ extension StravaUseCase: DependencyKey {
             return nil
         }
         
-        func getZoneType(by index: Int) throws -> SkillEngine.SEZoneType {
+        func getZoneType(by index: Int) throws -> PlayerEngine.SEZoneType {
             switch index {
             case 0: return .zone1
             case 1: return .zone2

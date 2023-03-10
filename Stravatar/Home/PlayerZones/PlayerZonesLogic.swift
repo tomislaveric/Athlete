@@ -26,7 +26,7 @@ struct PlayerZonesLogic: ReducerProtocol {
         case setHRzones([Zone])
     }
     
-    @Dependency(\.skillEngine) var skillEngine
+    @Dependency(\.playerEngine) var playerEngine
     @Dependency(\.stravaApi) var stravaApi
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
@@ -47,7 +47,7 @@ struct PlayerZonesLogic: ReducerProtocol {
             return .none
         case .setHRzones(let zones):
             state.hrZones = zones.filter { $0.type != .zone1 }
-            skillEngine.setup(zones: zones)
+            playerEngine.setup(zones: zones)
             state.isLoading = false
             return .none
         }

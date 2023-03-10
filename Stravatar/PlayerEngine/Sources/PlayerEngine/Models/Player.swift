@@ -7,7 +7,7 @@ public struct Player: Equatable {
         self.skills = skills
     }
     private(set) var id = UUID()
-    private(set) var name: String
-    private(set) var age: Int
-    private(set) var skills: [Skill]
+    public let name: String
+    public let age: Int
+    public let skills: [Skill]
 }

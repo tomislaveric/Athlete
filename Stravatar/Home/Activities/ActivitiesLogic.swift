@@ -26,7 +26,7 @@ struct ActivitiesLogic: ReducerProtocol {
     }
     
     @Dependency(\.stravaApi) var stravaApi
-    @Dependency(\.skillEngine) var skillEngine
+    @Dependency(\.playerEngine) var playerEngine
     
     var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
@@ -48,10 +48,10 @@ struct ActivitiesLogic: ReducerProtocol {
             case .activityElement(_, let action):
                 switch action {
                 case .selected(let activity):
-                    let skills = skillEngine.getSkillsFor(
+                    let skills = playerEngine.getSkillsFor(
                         heartRates: activity.heartRateTicks,
                         timeSample: activity.timeSample ?? 0)
-                    skillEngine.earn(skills: skills)
+                    playerEngine.update(skills: skills)
                     return .task { .skillsEarned }
                 default: return .none
                 }

@@ -32,7 +32,6 @@ struct HomeView: View {
             VStack {
                 HStack(alignment: .top) {
                     AvatarView(store: store.scope(state: \.avatar, action: HomeLogic.Action.avatar))
-                    SkillsHudView(store: store.scope(state: \.skillsHud, action: HomeLogic.Action.skillsHud))
                 }
                 Spacer()
             }

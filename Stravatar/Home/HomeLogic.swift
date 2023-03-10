@@ -14,7 +14,7 @@ struct HomeLogic: ReducerProtocol {
     
     struct State: Equatable {
         var profile: ProfileLogic.State
-        var skillsHud: SkillsHudLogic.State
+        
         var avatar: AvatarLogic.State
         var playerZones: PlayerZonesLogic.State
         var activityList = ActivitiesLogic.State()
@@ -23,7 +23,6 @@ struct HomeLogic: ReducerProtocol {
     
     enum Action: Equatable {
         case profile(ProfileLogic.Action)
-        case skillsHud(SkillsHudLogic.Action)
         case avatar(AvatarLogic.Action)
         case activityList(ActivitiesLogic.Action)
         case playerZones(PlayerZonesLogic.Action)
@@ -32,15 +31,12 @@ struct HomeLogic: ReducerProtocol {
     }
     
     @Dependency(\.stravaApi) var stravaApi
-    @Dependency(\.skillEngine) var skillEngine
+    @Dependency(\.playerEngine) var skillEngine
     @Dependency(\.mainQueue) var mainQueue
     
     var body: some ReducerProtocol<State, Action> {
         Scope(state: \.profile, action: /Action.profile) {
             ProfileLogic()
-        }
-        Scope(state: \.skillsHud, action: /Action.skillsHud) {
-            SkillsHudLogic()
         }
         Scope(state: \.avatar, action: /Action.avatar) {
             AvatarLogic()
@@ -73,7 +69,7 @@ struct HomeLogic: ReducerProtocol {
             case .profile(let action):
                 switch action {
                 case .updateSkills:
-                    return .task { .skillsHud(.updateHud) }
+                    return .task { .avatar(.skillsHud(.updateHud)) }
                 default: return .none
                 }
             case .handleAthleteResponse(.failure(let error)):
@@ -82,10 +78,10 @@ struct HomeLogic: ReducerProtocol {
             case .activityList(let action):
                 switch action {
                 case .skillsEarned:
-                    return .task { .skillsHud(.updateHud) }
+                    return .task { .avatar(.skillsHud(.updateHud)) }
                 default: return .none
                 }
-            case .skillsHud, .avatar, .playerZones:
+            case .playerZones, .avatar:
                 return .none
             }
         }

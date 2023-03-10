@@ -18,23 +18,21 @@ struct SkillsHudView: View {
     }
     
     var body: some View {
-        GroupBox {
-            VStack(alignment: .leading) {
-                Text(String(key: .skillsHudTitle))
-                    .bold()
-                Divider()
-                HStack {
-                    VStack(alignment: .leading) {
-                        ForEach(viewStore.playerSkills) { skill in
-                            Text("\(skill.zoneType.name)")
-                        }
+        VStack(alignment: .leading) {
+            Text(String(key: .skillsHudTitle))
+                .bold()
+            Divider()
+            HStack {
+                VStack(alignment: .leading) {
+                    ForEach(viewStore.playerSkills) { skill in
+                        Text("\(skill.zoneType.name)")
                     }
-                    VStack(alignment: .leading) {
-                        ForEach(viewStore.playerSkills) { skill in
-                            Text(String(format: "%.0f", skill.points))
-                        }
-                        
+                }
+                VStack(alignment: .leading) {
+                    ForEach(viewStore.playerSkills) { skill in
+                        Text(String(format: "%.0f", skill.points))
                     }
+                    
                 }
             }
         }
