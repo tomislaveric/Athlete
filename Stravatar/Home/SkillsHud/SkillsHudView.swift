@@ -23,12 +23,20 @@ struct SkillsHudView: View {
                 Text("Skills")
                     .bold()
                 Divider()
-                ForEach(viewStore.playerSkills) { skill in
-                    HStack {
-                        Text("\(skill.name)")
-                        Text(String(format: "%.0f", skill.points))
+                HStack {
+                    VStack(alignment: .leading) {
+                        ForEach(viewStore.playerSkills) { skill in
+                            Text("\(skill.zoneType.name)")
+                        }
+                    }
+                    VStack(alignment: .leading) {
+                        ForEach(viewStore.playerSkills) { skill in
+                            Text(String(format: "%.0f", skill.points))
+                        }
+                        
                     }
                 }
+                
             }
             
         }

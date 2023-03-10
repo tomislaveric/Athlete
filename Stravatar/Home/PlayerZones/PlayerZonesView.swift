@@ -31,6 +31,7 @@ struct PlayerZonesView: View {
             VStack(alignment: .leading) {
                 Text("Zones")
                     .bold()
+                Text("You heart rate zones")
                 Divider()
                 ForEach(viewStore.hrZones ?? placeholderZones) { zone in
                     ZoneView(type: zone.type, range: zone.range)
@@ -45,9 +46,9 @@ struct PlayerZonesView: View {
         
         var body: some View {
             if type == .zone5 {
-                return Text("\(type.rawValue): \(range.lowerBound) - ∞")
+                return Text("\(type.name): \(range.lowerBound) - ∞")
             } else {
-                return Text("\(type.rawValue): \(range.lowerBound) - \(range.upperBound)")
+                return Text("\(type.name): \(range.lowerBound) - \(range.upperBound)")
             }
         }
     }
