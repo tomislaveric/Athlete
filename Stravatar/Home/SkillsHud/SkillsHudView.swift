@@ -36,9 +36,7 @@ struct SkillsHudView: View {
                         
                     }
                 }
-                
             }
-            
         }
     }
 }

@@ -8,11 +8,13 @@
 import Foundation
 
 enum LocalizationKey: String {
-    case skillsHudTitle = "skills_hud_title"
-    case profileTitle = "profile_title"
     case playerHRzonesTitle = "player_heartrate_zones_title"
     case playerHRzonesDescription = "player_heartrate_zones_description"
+    case skillsHudTitle = "skills_hud_title"
+    case profileTitle = "profile_title"
     case activitiesTitle = "activities_title"
+    
+    //MARK: Generic strings
     case placeholder = "placeholder"
 }
 
