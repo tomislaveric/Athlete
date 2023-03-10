@@ -1,7 +1,7 @@
 import XCTest
 @testable import PlayerEngine
 
-final class SkillEngineTests: XCTestCase {
+final class PlayerEngineTests: XCTestCase {
 
     func test_heartRates_shouldReturn_mappedSkills() {
         let sut = createSUT()
@@ -29,20 +29,40 @@ final class SkillEngineTests: XCTestCase {
         ]
         
         //when
-        sut.earn(skills: skills)
-        sut.earn(skills: skills)
-        
+        sut.createPlayer(name: "Tomi")
+        sut.update(skills: skills)
+        sut.update(skills: skills)
+        let player = sut.getPlayer()
         //then
-        let playerSKills = sut.getPlayerSkills()
-        let playerPoints = playerSKills.map { $0.points }
+        let playerPoints = player?.skills.map { $0.points }
         let expectedPoints = expectedSkills.map { $0.points }
         XCTAssertEqual(playerPoints, expectedPoints)
-        
-    
+    }
+    func test_getPlayer_shouldReturn_Nil_ifnoPlayerCreated() {
+        let sut = createSUT()
+        let player = sut.getPlayer()
+        XCTAssertNil(player)
+    }
+    func test_createPlayer_shouldReturnPlayer_withInitialValues() {
+        let sut = createSUT()
+        sut.createPlayer(name: "Tomi")
+        let expectedPlayer = sut.getPlayer()
+        XCTAssertEqual(expectedPlayer?.age, 1)
+        XCTAssertEqual(expectedPlayer?.name, "Tomi")
+        XCTAssertEqual(expectedPlayer?.skills, [])
     }
     
-    private func createSUT() -> SkillEngine {
-        let sut: SkillEngine = SkillEngineImpl()
+    func test_setAge_shouldUpdatePlayer_withAge() {
+        let sut = createSUT()
+        let expectedPlayer = Player(name: "Tomi", age: 2)
+        sut.createPlayer(name: "Tomi")
+        sut.update(age: 2)
+        let player = sut.getPlayer()
+        XCTAssertEqual(player?.age, expectedPlayer.age)
+    }
+    
+    private func createSUT() -> PlayerEngine {
+        let sut: PlayerEngine = PlayerEngineImpl()
         sut.setup(zones: [
             Zone(range: 0..<138, type: .zone1),
             Zone(range: 138..<159, type: .zone2),
