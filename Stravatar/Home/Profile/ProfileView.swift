@@ -8,7 +8,6 @@
 import ComposableArchitecture
 import Foundation
 import SwiftUI
-import SkillEngine
 
 struct ProfileView: View {
     @ObservedObject

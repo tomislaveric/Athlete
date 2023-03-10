@@ -8,7 +8,7 @@
 import ComposableArchitecture
 import Foundation
 import SwiftUI
-import SkillEngine
+import PlayerEngine
 
 struct PlayerZonesView: View {
     @ObservedObject
@@ -17,13 +17,6 @@ struct PlayerZonesView: View {
     init(store: StoreOf<PlayerZonesLogic>) {
         self.viewStore = ViewStore(store)
     }
-    
-    private let placeholderZones = [
-        Zone(range: 0..<1, type: .zone2),
-        Zone(range: 0..<1, type: .zone3),
-        Zone(range: 0..<1, type: .zone4),
-        Zone(range: 0..<1, type: .zone5)
-    ]
     
     var body: some View {
         GroupBox {
@@ -34,12 +27,12 @@ struct PlayerZonesView: View {
                 Divider()
                 HStack {
                     VStack(alignment: .leading) {
-                        ForEach(viewStore.hrZones ?? placeholderZones) { zone in
+                        ForEach(viewStore.hrZones) { zone in
                             Text("\(zone.type.name)")
                         }
                     }.redacted(reason: viewStore.isLoading ? .placeholder : [])
                     VStack(alignment: .leading) {
-                        ForEach(viewStore.hrZones ?? placeholderZones) { zone in
+                        ForEach(viewStore.hrZones) { zone in
                             if zone.type == .zone5 {
                                 Text("\(zone.range.lowerBound) - ∞")
                             } else {

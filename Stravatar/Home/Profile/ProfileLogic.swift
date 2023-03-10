@@ -7,7 +7,7 @@
 
 import ComposableArchitecture
 import Foundation
-import SkillEngine
+import PlayerEngine
 
 struct ProfileLogic: ReducerProtocol {
     struct State: Equatable {

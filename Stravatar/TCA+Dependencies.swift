@@ -10,7 +10,7 @@ import ComposableArchitecture
 import StravaApi
 import OAuth
 import KeychainStorage
-import SkillEngine
+import PlayerEngine
 
 extension DependencyValues {
     

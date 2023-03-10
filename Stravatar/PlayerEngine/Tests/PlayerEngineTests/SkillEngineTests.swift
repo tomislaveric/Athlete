@@ -1,5 +1,5 @@
 import XCTest
-@testable import SkillEngine
+@testable import PlayerEngine
 
 final class SkillEngineTests: XCTestCase {
 
