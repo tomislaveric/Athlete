@@ -21,9 +21,9 @@ struct PlayerZonesView: View {
     var body: some View {
         GroupBox {
             VStack(alignment: .leading) {
-                Text(String(key: .playerHRzonesTitle))
+                Text(String(.playerHRzonesTitle))
                     .bold()
-                Text(String(key: .playerHRzonesDescription))
+                Text(String(.playerHRzonesDescription))
                 Divider()
                 HStack {
                     VStack(alignment: .leading) {

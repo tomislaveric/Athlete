@@ -19,7 +19,7 @@ struct SkillsHudView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(String(key: .skillsHudTitle))
+            Text(String(.skillsHudTitle))
                 .bold()
             Divider()
             HStack {

@@ -15,7 +15,7 @@ struct ActivityElementView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack(alignment: .leading) {
-                Text(viewStore.activity.name ?? String(key: .placeholder))
+                Text(viewStore.activity.name ?? String(.placeholder))
                 
                 HStack {
 //                    ForEach(viewStore.skills, id: \.zoneType) {

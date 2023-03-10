@@ -14,12 +14,22 @@ enum LocalizationKey: String {
     case profileTitle = "profile_title"
     case activitiesTitle = "activities_title"
     
+    //MARK: Avatar Info
+    case avatarInfoTitle = "avatar_info_title"
+    case avatarInfoName = "avatar_info_name"
+    case avatarInfoAge = "avatar_info_age"
+
+    //MARK: Avatar Creation
+    case avatarCreationNameInput = "avatar_creation_name_input_title"
+    case avatarCreationNameInputPlaceholder = "avatar_creation_name_input_placeholder"
+    case avatarCreationButtonTitle = "avatar_creation_button_title"
+    
     //MARK: Generic strings
     case placeholder = "placeholder"
 }
 
 extension String {
-    init(key: LocalizationKey) {
+    init(_ key: LocalizationKey) {
         self.init(NSLocalizedString(key.rawValue, comment: ""))
     }
 }

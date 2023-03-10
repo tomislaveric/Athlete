@@ -33,22 +33,22 @@ struct AvatarView: View {
     
     func avatarInfo(name: String, age: Int) -> some View {
         VStack(alignment: .leading) {
-            Text("Character info")
+            Text(String(.avatarInfoTitle))
                 .bold()
-            Text("Name: \(name)")
-            Text("Age: \(age)")
+            Text("\(String(.avatarInfoName)): \(name)")
+            Text("\(String(.avatarInfoAge)): \(age)")
         }
     }
     
     var avatarCreationView: some View {
         VStack(alignment: .leading) {
-            Text("What's your name?")
-            TextField("Enter character name",
+            Text(String(.avatarCreationNameInput))
+            TextField(String(.avatarCreationNameInputPlaceholder),
                       text: viewStore.binding(
                         get: { $0.enteredName },
                         send: AvatarLogic.Action.nameEntered)
             )
-            Button("Save", action: {
+            Button(String(.avatarCreationButtonTitle), action: {
                 viewStore.send(.saveNameTapped)
             })
         }
