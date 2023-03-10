@@ -15,7 +15,8 @@ struct ActivityElementView: View {
     var body: some View {
         WithViewStore(store) { viewStore in
             VStack(alignment: .leading) {
-                Text(viewStore.activity.name ?? "Activity Name")
+                Text(viewStore.activity.name ?? String(key: .placeholder))
+                
                 HStack {
 //                    ForEach(viewStore.skills, id: \.zoneType) {
 //                        Text("\($0.zoneType.rawValue): \($0.points)")

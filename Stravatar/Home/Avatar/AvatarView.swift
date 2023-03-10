@@ -18,6 +18,7 @@ struct AvatarView: View {
     
     var body: some View {
         VStack {
+            //Placeholder
             Text("AVATAR")
         }.frame(maxWidth: .infinity)
         

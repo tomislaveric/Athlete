@@ -29,9 +29,9 @@ struct PlayerZonesView: View {
     var body: some View {
         GroupBox {
             VStack(alignment: .leading) {
-                Text("Zones")
+                Text(String(key: .playerHRzonesTitle))
                     .bold()
-                Text("You heart rate zones")
+                Text(String(key: .playerHRzonesDescription))
                 Divider()
                 ForEach(viewStore.hrZones ?? placeholderZones) { zone in
                     ZoneView(type: zone.type, range: zone.range)

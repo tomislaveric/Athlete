@@ -20,7 +20,7 @@ struct SkillsHudView: View {
     var body: some View {
         GroupBox {
             VStack(alignment: .leading) {
-                Text("Skills")
+                Text(String(key: .skillsHudTitle))
                     .bold()
                 Divider()
                 HStack {

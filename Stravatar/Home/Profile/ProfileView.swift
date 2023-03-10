@@ -23,10 +23,10 @@ struct ProfileView: View {
     var body: some View {
         GroupBox {
             VStack(alignment: .leading) {
-                Text("Profile")
+                Text(String(key: .profileTitle))
                     .bold()
                 Divider()
-                Text(viewStore.state.playerName ?? "Placeholder")
+                Text(viewStore.state.playerName ?? String(key: .placeholder))
                     .redacted(reason: viewStore.isLoading ? .placeholder : [])
                 
             }

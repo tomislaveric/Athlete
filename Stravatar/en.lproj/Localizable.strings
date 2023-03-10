@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  Stravatar
+
+  Created by Tomislav Eric on 10.03.23.
+  
+*/
+
+"skills_hud_title" = "Skills";
+"player_heartrate_zones_title" = "Heartrate Zones";
+"player_heartrate_zones_description" = "Train in this heartrate zones to increase your skills";
+"profile_title" = "Profile";
+"activities_title" = "Latest Activities";
+"placeholder" = "Placeholder";

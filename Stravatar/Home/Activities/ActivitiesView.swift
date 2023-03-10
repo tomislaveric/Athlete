@@ -21,12 +21,12 @@ struct ActivitiesView: View {
     var body: some View {
         GroupBox {
             VStack(alignment: .leading) {
-                Text("Latest Activities").bold()
+                Text(String(key: .activitiesTitle)).bold()
                 Divider()
                 
                 if viewStore.state.activities.isEmpty {
                     ForEach(0..<viewStore.state.amountOfActivities, id: \.self) { _ in
-                        Text("Placeholder")
+                        Text(String(key: .placeholder))
                             .redacted(reason: viewStore.isLoading ? .placeholder : [])
                     }
                 } else {
