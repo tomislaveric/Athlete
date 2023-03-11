@@ -28,6 +28,8 @@ struct AvatarView: View {
                     avatarCreationView
                 }
             }
+        }.task {
+            viewStore.send(.initialize)
         }
     }
     
@@ -35,7 +37,18 @@ struct AvatarView: View {
         VStack(alignment: .leading) {
             Text(String(.avatarInfoTitle))
                 .bold()
-            Text("\(String(.avatarInfoName)): \(name)")
+           
+            if viewStore.inEditMode {
+                nameField(
+                    buttonTitle: String(.avatarInfoUpdateNameButton),
+                    action: { viewStore.send(.updateNameTapped) })
+            } else {
+                HStack {
+                    Text("\(String(.avatarInfoName)): \(name)")
+                    Button(String(.edit)) { viewStore.send(.editName) }
+                }
+            }
+            
             Text("\(String(.avatarInfoAge)): \(age)")
         }
     }
@@ -43,14 +56,21 @@ struct AvatarView: View {
     var avatarCreationView: some View {
         VStack(alignment: .leading) {
             Text(String(.avatarCreationNameInput))
+            nameField(
+                buttonTitle: String(.avatarCreationButtonTitle),
+                action: { viewStore.send(.saveNameTapped) })
+        }
+    }
+    
+    func nameField(buttonTitle: String, action: @escaping () -> Void) -> some View {
+        HStack {
             TextField(String(.avatarCreationNameInputPlaceholder),
                       text: viewStore.binding(
                         get: { $0.enteredName },
                         send: AvatarLogic.Action.nameEntered)
             )
-            Button(String(.avatarCreationButtonTitle), action: {
-                viewStore.send(.saveNameTapped)
-            })
+            Button(buttonTitle, action: action)
+            .disabled(!viewStore.isButtonActive)
         }
     }
 }

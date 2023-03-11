@@ -8,28 +8,28 @@ public protocol PlayerEngine {
     
     func getPlayer() -> Player?
     func createPlayer(name: String) -> Player
-    func update(skills: [Skill])
-    func update(age: Int)
-    func update(name: String)
+    func update(skills: [Skill]) throws -> Player
+    func update(age: Int) throws -> Player
+    func update(name: String) throws -> Player
 }
 
 public class PlayerEngineImpl: PlayerEngine {
-    public func update(age: Int) {
-        updatePlayer(age: age)
+    public func update(age: Int) throws -> Player {
+        try updatePlayer(age: age)
     }
     
-    public func update(name: String) {
-        updatePlayer(name: name)
+    public func update(name: String) throws -> Player {
+        try updatePlayer(name: name)
     }
     
-    public func update(skills: [Skill]) {
+    public func update(skills: [Skill]) throws -> Player {
         let skills = skills.map { new in
             guard let player: Skill = self.player?.skills.first(where: { player in player.zoneType == new.zoneType }) else {
                 return Skill(points: new.points, zoneType: new.zoneType)
             }
             return Skill(points: new.points + player.points, zoneType: new.zoneType)
         }
-        updatePlayer(skills: skills)
+        return try updatePlayer(skills: skills)
     }
     
     public func createPlayer(name: String) -> Player {
@@ -62,13 +62,15 @@ public class PlayerEngineImpl: PlayerEngine {
     
     private var player: Player?
     
-    private func updatePlayer(name: String? = nil, age: Int? = nil, skills: [Skill]? = nil) {
-        guard let player else { return }
-        self.player = Player(
+    private func updatePlayer(name: String? = nil, age: Int? = nil, skills: [Skill]? = nil) throws -> Player {
+        guard let player else { throw PlayerEngineError.updateFailed }
+        let updatedPlayer = Player(
             name: name ?? player.name,
             age: age ?? player.age,
             skills: skills ?? player.skills
         )
+        self.player = updatedPlayer
+        return updatedPlayer
     }
     
     private func getTimeSpent(in zone: ZoneType, for heartRates: [Int], timeSample: Double = 1) -> Double {
@@ -93,3 +95,6 @@ public extension PlayerEngine {
     }
 }
 
+enum PlayerEngineError: Error {
+    case updateFailed
+}

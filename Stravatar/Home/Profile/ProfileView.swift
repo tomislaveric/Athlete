@@ -24,7 +24,6 @@ struct ProfileView: View {
             VStack(alignment: .leading) {
                 Text(String(.stravaProfileTitle))
                     .bold()
-                Divider()
                 Text(viewStore.state.playerName ?? String(.placeholder))
                     .redacted(reason: viewStore.isLoading ? .placeholder : [])
                 

@@ -24,7 +24,6 @@ struct PlayerZonesView: View {
                 Text(String(.playerHRzonesTitle))
                     .bold()
                 Text(String(.playerHRzonesDescription))
-                Divider()
                 HStack {
                     VStack(alignment: .leading) {
                         ForEach(viewStore.hrZones) { zone in

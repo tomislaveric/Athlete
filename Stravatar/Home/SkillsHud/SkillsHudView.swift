@@ -21,7 +21,6 @@ struct SkillsHudView: View {
         VStack(alignment: .leading) {
             Text(String(.skillsHudTitle))
                 .bold()
-            Divider()
             HStack {
                 VStack(alignment: .leading) {
                     ForEach(viewStore.playerSkills) { skill in

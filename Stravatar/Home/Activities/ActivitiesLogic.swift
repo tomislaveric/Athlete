@@ -23,6 +23,7 @@ struct ActivitiesLogic: ReducerProtocol {
         case handleActivitiesResponse(TaskResult<[Activity]>)
         case setActivities([Activity]?)
         case skillsEarned
+        case handleUpdateResponse(TaskResult<Player>)
     }
     
     @Dependency(\.stravaApi) var stravaApi
@@ -51,8 +52,9 @@ struct ActivitiesLogic: ReducerProtocol {
                     let skills = playerEngine.getSkillsFor(
                         heartRates: activity.heartRateTicks,
                         timeSample: activity.timeSample ?? 0)
-                    playerEngine.update(skills: skills)
-                    return .task { .skillsEarned }
+                    return .task { await .handleUpdateResponse(TaskResult {
+                        try playerEngine.update(skills: skills)
+                    })}
                 default: return .none
                 }
             case .setActivities(let activities):
@@ -63,6 +65,10 @@ struct ActivitiesLogic: ReducerProtocol {
                 })
                 return .none
             case .skillsEarned:
+                return .none
+            case .handleUpdateResponse(.success(_)):
+                return .task { .skillsEarned }
+            case .handleUpdateResponse:
                 return .none
             }
         }.forEach(\.activities, action: /Action.activityElement(id:action:)) {

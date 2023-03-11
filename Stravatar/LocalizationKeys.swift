@@ -20,14 +20,17 @@ enum LocalizationKey: String {
     case avatarInfoTitle = "avatar_info_title"
     case avatarInfoName = "avatar_info_name"
     case avatarInfoAge = "avatar_info_age"
-
+    case avatarInfoUpdateNameButton = "Update name"
+    
     //MARK: Avatar Creation
     case avatarCreationNameInput = "avatar_creation_name_input_title"
     case avatarCreationNameInputPlaceholder = "avatar_creation_name_input_placeholder"
     case avatarCreationButtonTitle = "avatar_creation_button_title"
     
+    
     //MARK: Generic strings
-    case placeholder = "placeholder"
+    case placeholder = "Placeholder"
+    case edit = "Edit"
 }
 
 extension String {

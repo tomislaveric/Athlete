@@ -22,8 +22,6 @@ struct ActivitiesView: View {
         GroupBox {
             VStack(alignment: .leading) {
                 Text(String(.activitiesTitle)).bold()
-                Divider()
-                
                 if viewStore.state.activities.isEmpty {
                     ForEach(0..<viewStore.state.amountOfActivities, id: \.self) { _ in
                         Text(String(.placeholder))
