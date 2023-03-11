@@ -14,13 +14,10 @@ struct ActivitiesLogic: ReducerProtocol {
     struct State: Equatable {
         var activities: IdentifiedArrayOf<ActivityElementLogic.State> = []
         var isLoading = true
-        let amountOfActivities: Int = 5
     }
     
     enum Action: Equatable {
         case activityElement(id: ActivityElementLogic.State.ID, action: ActivityElementLogic.Action)
-        case fetchActivities
-        case handleActivitiesResponse(TaskResult<[Activity]>)
         case setActivities([Activity]?)
         case skillsEarned
         case handleUpdateResponse(TaskResult<Player>)
@@ -32,20 +29,6 @@ struct ActivitiesLogic: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
-            case .fetchActivities:
-                let amount = state.amountOfActivities
-                return .task {
-                    await .handleActivitiesResponse(TaskResult {
-                        try await stravaApi.getActivities(amount)
-                    })
-                }
-            case .handleActivitiesResponse(.success(let activities)):
-                state.isLoading = false
-                return .task { .setActivities(activities) }
-            case .handleActivitiesResponse(.failure(let error)):
-                state.isLoading = false
-                dump(error)
-                return .none
             case .activityElement(_, let action):
                 switch action {
                 case .selected(let activity):
@@ -58,7 +41,7 @@ struct ActivitiesLogic: ReducerProtocol {
                 default: return .none
                 }
             case .setActivities(let activities):
-                guard let activities = activities?.prefix(state.amountOfActivities) else { return .none }
+                guard let activities else { return .none }
                 state.activities = IdentifiedArrayOf(uniqueElements: activities.map {
                     let activity = $0
                     return ActivityElementLogic.State(activity: activity)

@@ -12,11 +12,10 @@ import ComposableArchitecture
 struct StravatarApp: App {
     let store = Store(
         initialState: HomeLogic.State(
-            profile: .init(playerName: .init()),
+            profile: .init(),
             avatar: .init(
                 skillsHud: .init()
-            ),
-            playerZones: .init()
+            )
         ),
         reducer: HomeLogic())
     var body: some Scene {

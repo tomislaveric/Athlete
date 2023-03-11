@@ -6,7 +6,10 @@
 //
 
 import Foundation
+import PlayerEngine
 
 struct Profile: Equatable {
     let name: String?
+    var hrZones: [Zone]?
+    var activities: [Activity]?
 }

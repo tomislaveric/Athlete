@@ -20,9 +20,6 @@ struct PlayerZonesLogic: ReducerProtocol {
     }
     
     enum Action: Equatable {
-        case profileFetched
-        case fetchHeartRateZones
-        case handleHeartRateZonesResponse(TaskResult<[Zone]>)
         case setHRzones([Zone])
     }
     
@@ -31,20 +28,6 @@ struct PlayerZonesLogic: ReducerProtocol {
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
-        case .profileFetched:
-            return .task { .fetchHeartRateZones }
-        case .fetchHeartRateZones:
-            return .task {
-                await .handleHeartRateZonesResponse(TaskResult {
-                    try await stravaApi.getAthleteZones()
-                })
-            }
-        case .handleHeartRateZonesResponse(.success(let zones)):
-            state.isLoading = false
-            return .task { .setHRzones(zones) }
-        case .handleHeartRateZonesResponse(.failure):
-            state.isLoading = false
-            return .none
         case .setHRzones(let zones):
             state.hrZones = zones.filter { $0.type != .zone1 }
             playerEngine.setup(zones: zones)

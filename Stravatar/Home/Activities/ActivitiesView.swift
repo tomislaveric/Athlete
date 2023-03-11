@@ -23,7 +23,7 @@ struct ActivitiesView: View {
             VStack(alignment: .leading) {
                 Text(String(.activitiesTitle)).bold()
                 if viewStore.state.activities.isEmpty {
-                    ForEach(0..<viewStore.state.amountOfActivities, id: \.self) { _ in
+                    ForEach(viewStore.state.activities) { _ in
                         Text(String(.placeholder))
                             .redacted(reason: viewStore.isLoading ? .placeholder : [])
                     }
