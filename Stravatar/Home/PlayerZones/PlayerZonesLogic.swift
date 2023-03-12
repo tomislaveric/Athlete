@@ -10,12 +10,7 @@ import Foundation
 
 struct PlayerZonesLogic: ReducerProtocol {
     struct State: Equatable {
-        var hrZones: [Zone] = [
-            Zone(range: 0..<1, type: .zone2),
-            Zone(range: 0..<1, type: .zone3),
-            Zone(range: 0..<1, type: .zone4),
-            Zone(range: 0..<1, type: .zone5)
-        ]
+        var hrZones: [Zone] = []
         var isLoading: Bool = true
     }
     
@@ -24,7 +19,6 @@ struct PlayerZonesLogic: ReducerProtocol {
     }
     
     @Dependency(\.playerEngine) var playerEngine
-    @Dependency(\.stravaApi) var stravaApi
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {

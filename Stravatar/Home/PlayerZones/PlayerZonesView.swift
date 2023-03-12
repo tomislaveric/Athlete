@@ -20,25 +20,27 @@ struct PlayerZonesView: View {
     
     var body: some View {
         GroupBox {
-            VStack(alignment: .leading) {
-                Text(String(.playerHRzonesTitle))
-                    .bold()
-                Text(String(.playerHRzonesDescription))
-                HStack {
-                    VStack(alignment: .leading) {
-                        ForEach(viewStore.hrZones) { zone in
-                            Text("\(zone.type.name)")
-                        }
-                    }.redacted(reason: viewStore.isLoading ? .placeholder : [])
-                    VStack(alignment: .leading) {
-                        ForEach(viewStore.hrZones) { zone in
-                            if zone.type == .zone5 {
-                                Text("\(zone.range.lowerBound) - ∞")
-                            } else {
-                                Text("\(zone.range.lowerBound) - \(zone.range.upperBound)")
+            if !viewStore.isLoading {
+                VStack(alignment: .leading) {
+                    Text(String(.playerHRzonesTitle))
+                        .bold()
+                    Text(String(.playerHRzonesDescription))
+                    HStack {
+                        VStack(alignment: .leading) {
+                            ForEach(viewStore.hrZones) { zone in
+                                Text("\(zone.type.name)")
                             }
                         }
-                    }.redacted(reason: viewStore.isLoading ? .placeholder : [])
+                        VStack(alignment: .leading) {
+                            ForEach(viewStore.hrZones) { zone in
+                                if zone.type == .zone5 {
+                                    Text("\(zone.range.lowerBound) - ∞")
+                                } else {
+                                    Text("\(zone.range.lowerBound) - \(zone.range.upperBound)")
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

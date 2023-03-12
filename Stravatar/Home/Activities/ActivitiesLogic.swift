@@ -23,7 +23,6 @@ struct ActivitiesLogic: ReducerProtocol {
         case handleUpdateResponse(TaskResult<Player>)
     }
     
-    @Dependency(\.stravaApi) var stravaApi
     @Dependency(\.playerEngine) var playerEngine
     
     var body: some ReducerProtocol<State, Action> {
@@ -42,6 +41,7 @@ struct ActivitiesLogic: ReducerProtocol {
                 }
             case .setActivities(let activities):
                 guard let activities else { return .none }
+                state.isLoading = false
                 state.activities = IdentifiedArrayOf(uniqueElements: activities.map {
                     let activity = $0
                     return ActivityElementLogic.State(activity: activity)

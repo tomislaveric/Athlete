@@ -13,6 +13,7 @@
 
 //Strava
 "strava_profile_title" = "Strava Profile";
+"strava_connect_button_title" = "Connect Strava";
 
 //Avatar Info
 "avatar_info_title" = "Character info";

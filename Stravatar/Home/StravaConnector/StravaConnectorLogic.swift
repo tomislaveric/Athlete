@@ -11,23 +11,38 @@ import PlayerEngine
 
 struct StravaConnectorLogic: ReducerProtocol {
     struct State: Equatable {
-        let name = "Connect to Strava"
         let amountOfActivities: Int = 5
+        var isLoading: Bool = true
     }
     enum Action: Equatable {
         case handleAthleteResponse(TaskResult<Profile>)
-        case connectTapped
+        case initialized
+        case connect
         case stravaConnected(Profile)
         case zonesFetched([Zone])
         case activitiesFetched([Activity])
         case handleHeartRateZonesResponse(TaskResult<[Zone]>)
         case handleActivitiesResponse(TaskResult<[Activity]>)
+        case handleTokenCheckResponse(TaskResult<Bool>)
         
     }
     var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
-            case .connectTapped:
+            case .initialized:
+                   return .task {
+                        await .handleTokenCheckResponse(TaskResult {
+                            try stravaApi.isTokenAvailable()
+                        })
+                    }
+            case .handleTokenCheckResponse(.success(let isAvailable)):
+                if isAvailable {
+                    return .task { .connect }
+                } else {
+                    state.isLoading = false
+                    return .none
+                }
+            case .connect:
                 let amount = state.amountOfActivities
                 return .concatenate(
                     .fireAndForget {
@@ -55,7 +70,7 @@ struct StravaConnectorLogic: ReducerProtocol {
                 return .task { .zonesFetched(zones) }
             case .handleAthleteResponse(.success(let profile)):
                 return .task { .stravaConnected(profile) }
-            case .stravaConnected, .zonesFetched, .activitiesFetched, .handleHeartRateZonesResponse, .handleAthleteResponse, .handleActivitiesResponse:
+            case .stravaConnected, .zonesFetched, .activitiesFetched, .handleHeartRateZonesResponse, .handleAthleteResponse, .handleActivitiesResponse, .handleTokenCheckResponse:
                 return .none
             }
         }

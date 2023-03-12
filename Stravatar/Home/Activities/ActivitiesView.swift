@@ -19,15 +19,10 @@ struct ActivitiesView: View {
     }
     
     var body: some View {
-        GroupBox {
-            VStack(alignment: .leading) {
-                Text(String(.activitiesTitle)).bold()
-                if viewStore.state.activities.isEmpty {
-                    ForEach(viewStore.state.activities) { _ in
-                        Text(String(.placeholder))
-                            .redacted(reason: viewStore.isLoading ? .placeholder : [])
-                    }
-                } else {
+        if !viewStore.isLoading {
+            GroupBox {
+                VStack(alignment: .leading) {
+                    Text(String(.activitiesTitle)).bold()
                     ForEachStore(
                         self.store.scope(state: \.activities, action: ActivitiesLogic.Action.activityElement(id:action:))
                     ) { todoStore in

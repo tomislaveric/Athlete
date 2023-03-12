@@ -23,22 +23,13 @@ struct ProfileView: View {
         GroupBox {
             VStack(alignment: .leading) {
                 
-                Text(String(.stravaProfileTitle))
-                    .bold()
+                StravaConnectorView(store: store.scope(state: \.stravaConnector, action: ProfileLogic.Action.stravaConnector))
                 
                 Text(viewStore.profile?.name ?? String(.placeholder))
                     .redacted(reason: viewStore.isLoading ? .placeholder : [])
                 
-                if viewStore.profile == nil {
-                    StravaConnectorView(store: store.scope(state: \.stravaConnector, action: ProfileLogic.Action.stravaConnector))
-                }
-                
-                if viewStore.profile?.hrZones != nil {
-                    PlayerZonesView(store: store.scope(state: \.playerZones, action: ProfileLogic.Action.playerZones))
-                }
-                if viewStore.profile?.activities != nil {
-                    ActivitiesView(store: store.scope(state: \.activityList, action: ProfileLogic.Action.activityList))
-                }
+                PlayerZonesView(store: store.scope(state: \.playerZones, action: ProfileLogic.Action.playerZones))
+                ActivitiesView(store: store.scope(state: \.activityList, action: ProfileLogic.Action.activityList))
             }
         }
     }

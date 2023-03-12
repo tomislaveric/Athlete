@@ -15,6 +15,7 @@ enum LocalizationKey: String {
     
     //MARK: Strava
     case stravaProfileTitle = "strava_profile_title"
+    case stravaConnectButtonTitle = "strava_connect_button_title"
     
     //MARK: Avatar Info
     case avatarInfoTitle = "avatar_info_title"

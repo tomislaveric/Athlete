@@ -10,15 +10,23 @@ import ComposableArchitecture
 import SwiftUI
 
 struct StravaConnectorView: View {
-    private let viewStore: ViewStoreOf<StravaConnectorLogic>
+    @ObservedObject
+    private var viewStore: ViewStoreOf<StravaConnectorLogic>
     init(store: StoreOf<StravaConnectorLogic>) {
         self.viewStore = ViewStore(store)
     }
     var body: some View {
         VStack {
-            Button(viewStore.name) {
-                viewStore.send(.connectTapped)
+            Text(String(.stravaProfileTitle))
+                .bold()
+            
+            if !viewStore.isLoading {
+                Button(String(.stravaConnectButtonTitle)) {
+                    viewStore.send(.connect)
+                }
             }
+        }.task {
+            viewStore.send(.initialized)
         }
     }
 }

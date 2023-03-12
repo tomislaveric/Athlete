@@ -13,6 +13,7 @@ import PlayerEngine
 import OAuth
 
 public struct StravaUseCase {
+    var isTokenAvailable: () throws -> Bool
     var registerTokenUpdate: () async throws -> Void
     var getProfile: () async throws -> Profile
     var getActivities: (_ amount: Int) async throws -> [Activity]
@@ -34,6 +35,10 @@ extension StravaUseCase: DependencyKey {
     
     private static let storageName = Bundle.main.bundleIdentifier ?? "strava_api.oauth_token"
     public static let liveValue = Self(
+        isTokenAvailable: {
+            let token: Token? = try storage.read(name: storageName)
+            return token != nil
+        },
         registerTokenUpdate: {
             try api.registerTokenUpdate(
                 current: storage.read(name: storageName),
