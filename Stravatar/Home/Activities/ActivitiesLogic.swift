@@ -29,16 +29,17 @@ struct ActivitiesLogic: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .activityElement(_, let action):
-                switch action {
-                case .selected(let activity):
-                    let skills = playerEngine.getSkillsFor(
-                        heartRates: activity.heartRateTicks,
-                        timeSample: activity.timeSample ?? 0)
-                    return .task { await .handleUpdateResponse(TaskResult {
-                        try playerEngine.update(skills: skills)
-                    })}
-                default: return .none
-                }
+                return .none
+//                switch action {
+//                case .selected(let activity):
+//                    let skills = playerEngine.getSkillsFor(
+//                        heartRates: activity.heartRateTicks,
+//                        timeSample: activity.timeSample ?? 0)
+//                    return .task { await .handleUpdateResponse(TaskResult {
+//                        try playerEngine.update(skills: skills)
+//                    })}
+//                default: return .none
+//                }
             case .setActivities(let activities):
                 guard let activities else { return .none }
                 state.isLoading = false

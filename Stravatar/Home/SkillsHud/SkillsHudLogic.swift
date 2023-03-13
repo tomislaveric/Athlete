@@ -15,18 +15,14 @@ struct SkillsHudLogic: ReducerProtocol {
     }
     
     enum Action: Equatable {
-        case updateHud
+        case updateHud(Player?)
     }
-    
-    @Dependency(\.playerEngine) var playerEngine
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
-        case .updateHud:
-            guard let player = playerEngine.getPlayer() else {
-                return .none
-            }
-            state.playerSkills = player.skills
+        case .updateHud(let player):
+            guard let player, let skills = player.skills else { return .none }
+            state.playerSkills = skills
                 .filter { $0.zoneType != .zone1 }
             return .none
         }

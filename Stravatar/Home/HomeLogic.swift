@@ -38,13 +38,7 @@ struct HomeLogic: ReducerProtocol {
             switch action {
             case .onAppearance:
                 return .none
-            case .profile(let action):
-                switch action {
-                case .updateSkills:
-                    return .task { .avatar(.skillsHud(.updateHud)) }
-                default: return .none
-                }
-            case .avatar:
+            case .avatar, .profile:
                 return .none
             }
         }

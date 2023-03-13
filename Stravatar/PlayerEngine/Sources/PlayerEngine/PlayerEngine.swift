@@ -1,4 +1,5 @@
 import Foundation
+import HTTPRequest
 
 public protocol PlayerEngine {
     typealias PlayerZoneType = ZoneType
@@ -6,45 +7,49 @@ public protocol PlayerEngine {
     func setup(zones: [Zone])
     func getSkillsFor(heartRates: [Int], timeSample: Double) -> [Skill]
     
-    func getPlayer() -> Player?
-    func createPlayer(name: String) -> Player
-    func update(skills: [Skill]) throws -> Player
-    func update(age: Int) throws -> Player
-    func update(name: String) throws -> Player
+    func getPlayer() async throws -> Player?
+    func createPlayer(name: String) async throws -> Player
+    func update(id: UUID, skills: [Skill]) async throws -> Player
+    func update(id: UUID, age: Int) async throws -> Player
+    func update(id: UUID, name: String) async throws -> Player
 }
 
 public class PlayerEngineImpl: PlayerEngine {
-    public func update(age: Int) throws -> Player {
-        try updatePlayer(age: age)
-    }
-    
-    public func update(name: String) throws -> Player {
-        try updatePlayer(name: name)
-    }
-    
-    public func update(skills: [Skill]) throws -> Player {
-        let skills = skills.map { new in
-            guard let player: Skill = self.player?.skills.first(where: { player in player.zoneType == new.zoneType }) else {
-                return Skill(points: new.points, zoneType: new.zoneType)
-            }
-            return Skill(points: new.points + player.points, zoneType: new.zoneType)
+    public func update(id: UUID, age: Int) async throws -> Player {
+        guard let baseURL, let url = URL(string: "\(baseURL)/player") else {
+            throw PlayerEngineError.endpointURLWrong
         }
-        return try updatePlayer(skills: skills)
+        return try await httpRequest.put(url: url, header: nil, body: Player(id: id, age: age))
     }
     
-    public func createPlayer(name: String) -> Player {
-        let player = Player(name: name, skills: [
-            Skill(points: 0, zoneType: .zone2),
-            Skill(points: 0, zoneType: .zone3),
-            Skill(points: 0, zoneType: .zone4),
-            Skill(points: 0, zoneType: .zone5)
-        ])
-        self.player = player
-        return player
+    public func update(id: UUID, name: String) async throws -> Player {
+        guard let baseURL, let url = URL(string: "\(baseURL)/player") else {
+            throw PlayerEngineError.endpointURLWrong
+        }
+        return try await httpRequest.put(url: url, header: nil, body: Player(id: id, name: name))
     }
     
-    public func getPlayer() -> Player? {
-        return self.player
+    public func update(id: UUID, skills: [Skill]) async throws -> Player {
+        guard let baseURL, let url = URL(string: "\(baseURL)/player") else {
+            throw PlayerEngineError.endpointURLWrong
+        }
+        return try await httpRequest.put(url: url, header: nil, body: Player(id: id, skills: skills))
+    }
+    
+    public func createPlayer(name: String) async throws -> Player {
+        let player = Player(id: UUID(), name: name)
+
+        guard let baseURL, let url = URL(string: "\(baseURL)/player") else {
+            throw PlayerEngineError.endpointURLWrong
+        }
+        return try await httpRequest.post(url: url, header: nil, body: player)
+    }
+    
+    public func getPlayer() async throws -> Player? {
+        guard let baseURL, let url = URL(string: "\(baseURL)/player") else {
+            throw PlayerEngineError.endpointURLWrong
+        }
+        return try await httpRequest.get(url: url, header: nil)
     }
     
     public func getSkillsFor(heartRates: [Int], timeSample: Double) -> [Skill] {
@@ -58,20 +63,13 @@ public class PlayerEngineImpl: PlayerEngine {
         self.userZones = zones
     }
     
-    public init() {}
-    
-    private var player: Player?
-    
-    private func updatePlayer(name: String? = nil, age: Int? = nil, skills: [Skill]? = nil) throws -> Player {
-        guard let player else { throw PlayerEngineError.updateFailed }
-        let updatedPlayer = Player(
-            name: name ?? player.name,
-            age: age ?? player.age,
-            skills: skills ?? player.skills
-        )
-        self.player = updatedPlayer
-        return updatedPlayer
+    public init(httpRequest: HTTPRequest = HTTPRequestImpl(), baseURL: String) {
+        self.httpRequest = httpRequest
+        self.baseURL = URL(string: baseURL)
     }
+    
+    private var baseURL: URL?
+    private let httpRequest: HTTPRequest
     
     private func getTimeSpent(in zone: ZoneType, for heartRates: [Int], timeSample: Double = 1) -> Double {
         Double(heartRates.filter { getHrZoneType(heartRate: $0) == zone }.count) * timeSample
@@ -97,4 +95,5 @@ public extension PlayerEngine {
 
 enum PlayerEngineError: Error {
     case updateFailed
+    case endpointURLWrong
 }

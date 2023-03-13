@@ -23,7 +23,8 @@ struct AvatarLogic: ReducerProtocol {
     
     enum Action: Equatable {
         case skillsHud(SkillsHudLogic.Action)
-        case handleUpdateResponse(TaskResult<Player>)
+        case handlePlayerResponse(TaskResult<Player?>)
+        case handlePlayerCreatedResponse(TaskResult<Player>)
         case initialize
         case createPlayer
         case nameEntered(String)
@@ -32,6 +33,7 @@ struct AvatarLogic: ReducerProtocol {
         case editName
         case updateNameTapped
         case updateName
+        case updateHud
     }
     
     @Dependency(\.playerEngine) var playerEngine
@@ -43,11 +45,18 @@ struct AvatarLogic: ReducerProtocol {
         Reduce { state, action in
             switch action {
             case .initialize:
-                state.player = playerEngine.getPlayer()
-                return .task { .skillsHud(.updateHud) }
+                return .task {
+                    await .handlePlayerResponse(TaskResult {
+                        try await playerEngine.getPlayer()
+                    })
+                }
             case .createPlayer:
-                state.player = playerEngine.createPlayer(name: state.enteredName)
-                return .task { .playerCreated }
+                let name = state.enteredName
+                return .task {
+                    await .handlePlayerCreatedResponse(TaskResult {
+                        try await playerEngine.createPlayer(name: name)
+                    })
+                }
             case .nameEntered(let text):
                 state.enteredName = text
                 state.isButtonActive = state.enteredName.count >= state.minNameLength
@@ -55,24 +64,35 @@ struct AvatarLogic: ReducerProtocol {
             case .saveNameTapped:
                 return .task { .createPlayer }
             case .playerCreated:
-                return .task { .skillsHud(.updateHud) }
+                return .task { .updateHud }
             case .editName:
                 state.inEditMode = true
-                return .task { .skillsHud(.updateHud) }
+                return .task { .updateHud }
             case .updateNameTapped:
                 state.inEditMode = false
                 return .task { .updateName }
             case .updateName:
+                guard let id = state.player?.id else { return .none }
                 let name = state.enteredName
-                return .task { await .handleUpdateResponse(TaskResult {
-                    try playerEngine.update(name: name)
+                return .task { await .handlePlayerResponse(TaskResult {
+                    try await playerEngine.update(id: id, name: name)
                 })}
             case .skillsHud:
                 return .none
-            case .handleUpdateResponse(.success(let player)):
+            case .handlePlayerResponse(.success(let player)):
                 state.player = player
-                return .task { .skillsHud(.updateHud) }
-            case .handleUpdateResponse:
+                return .task { .updateHud }
+            case .handlePlayerCreatedResponse(.success(let player)):
+                state.player = player
+                return .task { .playerCreated }
+            case .updateHud:
+                let player = state.player
+                return .task { .skillsHud(.updateHud(player)) }
+            case .handlePlayerResponse(.failure(let error)):
+                dump(error)
+                return .none
+            case .handlePlayerCreatedResponse(.failure(let error)):
+                dump(error)
                 return .none
             }
         }

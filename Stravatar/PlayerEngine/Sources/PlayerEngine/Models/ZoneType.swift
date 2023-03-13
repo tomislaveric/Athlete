@@ -1,6 +1,6 @@
 import Foundation
 
-public enum ZoneType: String, Equatable, Identifiable, CaseIterable {
+public enum ZoneType: String, Equatable, Identifiable, CaseIterable, Codable {
     public var id: Self {
         return self
     }

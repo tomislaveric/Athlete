@@ -18,7 +18,7 @@ extension DependencyValues {
     
     private enum PlayerEngineKey: DependencyKey {
         typealias Value = PlayerEngine
-        static let liveValue: PlayerEngine = PlayerEngineImpl()
+        static let liveValue: PlayerEngine = PlayerEngineImpl(baseURL: "http://localhost:8080")
     }
     
     var playerEngine: PlayerEngine {

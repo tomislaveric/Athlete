@@ -20,8 +20,8 @@ struct AvatarView: View {
     var body: some View {
         GroupBox {
             VStack(alignment: .leading) {
-                if let player = viewStore.player {
-                    avatarInfo(name: player.name, age: player.age)
+                if let player = viewStore.player, let name = player.name, let age = player.age {
+                    avatarInfo(name: name, age: age)
                     Divider()
                     SkillsHudView(store: store.scope(state: \.skillsHud, action: AvatarLogic.Action.skillsHud))
                 } else {
