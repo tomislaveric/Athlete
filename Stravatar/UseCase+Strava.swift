@@ -9,7 +9,7 @@ import Foundation
 import ComposableArchitecture
 import StravaApi
 import KeychainStorage
-import PlayerEngine
+import AvatarService
 import OAuth
 
 public struct StravaUseCase {
@@ -48,7 +48,9 @@ extension StravaUseCase: DependencyKey {
         },
         getProfile: {
             let athlete = try await api.getDetailedAthlete()
-            return Profile(name: athlete.firstname)
+            guard let id = athlete.id else { throw StravaError.idParsingFailed }
+            let connection = Connection(id: String(id), type: .strava)
+            return Profile(connections: [connection])
         },
         getActivities: { amount in
             let activities = try await api.getAthleteDetailedActivities(perPage: amount)
@@ -95,7 +97,7 @@ extension StravaUseCase: DependencyKey {
             return nil
         }
         
-        func getZoneType(by index: Int) throws -> PlayerEngine.PlayerZoneType {
+        func getZoneType(by index: Int) throws -> AvatarService.PlayerZoneType {
             switch index {
             case 0: return .zone1
             case 1: return .zone2
@@ -111,4 +113,5 @@ extension StravaUseCase: DependencyKey {
 enum StravaError: Error {
     case couldNotMap
     case zoneOutOfRange
+    case idParsingFailed
 }

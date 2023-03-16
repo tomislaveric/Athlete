@@ -8,7 +8,7 @@
 import ComposableArchitecture
 import Foundation
 import SwiftUI
-import PlayerEngine
+import AvatarService
 
 struct PlayerZonesView: View {
     @ObservedObject

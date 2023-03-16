@@ -6,7 +6,7 @@
 //
 
 import ComposableArchitecture
-import PlayerEngine
+import AvatarService
 import Foundation
 
 struct SkillsHudLogic: ReducerProtocol {
@@ -15,7 +15,7 @@ struct SkillsHudLogic: ReducerProtocol {
     }
     
     enum Action: Equatable {
-        case updateHud(Player?)
+        case updateHud(Avatar?)
     }
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {

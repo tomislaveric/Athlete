@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 import ComposableArchitecture
-import PlayerEngine
+import AvatarService
 
 struct HomeLogic: ReducerProtocol {
     
@@ -24,7 +24,6 @@ struct HomeLogic: ReducerProtocol {
         case onAppearance
     }
     
-    @Dependency(\.playerEngine) var skillEngine
     @Dependency(\.mainQueue) var mainQueue
     
     var body: some ReducerProtocol<State, Action> {

@@ -7,7 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
-import PlayerEngine
+import AvatarService
 
 struct StravaConnectorLogic: ReducerProtocol {
     struct State: Equatable {

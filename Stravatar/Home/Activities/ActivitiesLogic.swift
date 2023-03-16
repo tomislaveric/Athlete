@@ -7,7 +7,7 @@
 
 import ComposableArchitecture
 import Foundation
-import PlayerEngine
+import AvatarService
 
 struct ActivitiesLogic: ReducerProtocol {
     
@@ -20,10 +20,10 @@ struct ActivitiesLogic: ReducerProtocol {
         case activityElement(id: ActivityElementLogic.State.ID, action: ActivityElementLogic.Action)
         case setActivities([Activity]?)
         case skillsEarned
-        case handleUpdateResponse(TaskResult<Player>)
+        case handleUpdateResponse(TaskResult<Avatar>)
     }
     
-    @Dependency(\.playerEngine) var playerEngine
+    @Dependency(\.avatarService) var avatarService
     
     var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in

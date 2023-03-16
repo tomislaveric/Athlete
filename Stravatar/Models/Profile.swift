@@ -6,10 +6,22 @@
 //
 
 import Foundation
-import PlayerEngine
+import AvatarService
 
 struct Profile: Equatable {
-    let name: String?
     var hrZones: [Zone]?
     var activities: [Activity]?
+    var connections: [Connection]?
+    var activeConnection: Connection?
+}
+
+struct Connection: Equatable {
+    let id: String?
+    let type: ConnectionType
+}
+
+enum ConnectionType: String, Equatable {
+    case strava = "Strava"
+    case garmin = "Garmin"
+    case none
 }

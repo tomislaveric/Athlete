@@ -7,7 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
-import PlayerEngine
+import AvatarService
 
 extension DependencyValues {
     
@@ -16,13 +16,13 @@ extension DependencyValues {
         set { self[StravaUseCase.self] = newValue }
     }
     
-    private enum PlayerEngineKey: DependencyKey {
-        typealias Value = PlayerEngine
-        static let liveValue: PlayerEngine = PlayerEngineImpl(baseURL: "http://localhost:8080")
+    private enum AvatarServiceKey: DependencyKey {
+        typealias Value = AvatarService
+        static let liveValue: AvatarService = AvatarServiceImpl(baseURL: "http://localhost:8080")
     }
     
-    var playerEngine: PlayerEngine {
-        get { self[PlayerEngineKey.self] }
-        set { self[PlayerEngineKey.self] = newValue }
+    var avatarService: AvatarService {
+        get { self[AvatarServiceKey.self] }
+        set { self[AvatarServiceKey.self] = newValue }
     }
 }

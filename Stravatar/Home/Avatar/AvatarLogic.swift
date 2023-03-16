@@ -7,7 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
-import PlayerEngine
+import AvatarService
 
 struct AvatarLogic: ReducerProtocol {
     
@@ -15,7 +15,7 @@ struct AvatarLogic: ReducerProtocol {
         var skillsHud: SkillsHudLogic.State
         var playerExists: Bool = false
         var enteredName: String = ""
-        var player: Player?
+        var player: Avatar?
         var isButtonActive: Bool = false
         let minNameLength = 3
         var inEditMode: Bool = false
@@ -23,8 +23,8 @@ struct AvatarLogic: ReducerProtocol {
     
     enum Action: Equatable {
         case skillsHud(SkillsHudLogic.Action)
-        case handlePlayerResponse(TaskResult<Player?>)
-        case handlePlayerCreatedResponse(TaskResult<Player>)
+        case handlePlayerResponse(TaskResult<Avatar?>)
+        case handlePlayerCreatedResponse(TaskResult<Avatar>)
         case initialize
         case createPlayer
         case nameEntered(String)
@@ -36,7 +36,7 @@ struct AvatarLogic: ReducerProtocol {
         case updateHud
     }
     
-    @Dependency(\.playerEngine) var playerEngine
+    @Dependency(\.avatarService) var avatarService
     
     var body: some ReducerProtocol<State, Action> {
         Scope(state: \.skillsHud, action: /Action.skillsHud) {
@@ -47,14 +47,14 @@ struct AvatarLogic: ReducerProtocol {
             case .initialize:
                 return .task {
                     await .handlePlayerResponse(TaskResult {
-                        try await playerEngine.getPlayer()
+                        try await avatarService.getAvatars()
                     })
                 }
             case .createPlayer:
                 let name = state.enteredName
                 return .task {
                     await .handlePlayerCreatedResponse(TaskResult {
-                        try await playerEngine.createPlayer(name: name)
+                        try await avatarService.createAvatar(name: name)
                     })
                 }
             case .nameEntered(let text):
@@ -75,7 +75,7 @@ struct AvatarLogic: ReducerProtocol {
                 guard let id = state.player?.id else { return .none }
                 let name = state.enteredName
                 return .task { await .handlePlayerResponse(TaskResult {
-                    try await playerEngine.update(id: id, name: name)
+                    try await avatarService.update(id: id, name: name)
                 })}
             case .skillsHud:
                 return .none
@@ -83,6 +83,7 @@ struct AvatarLogic: ReducerProtocol {
                 state.player = player
                 return .task { .updateHud }
             case .handlePlayerCreatedResponse(.success(let player)):
+                dump(player)
                 state.player = player
                 return .task { .playerCreated }
             case .updateHud:

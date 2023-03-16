@@ -1,7 +1,7 @@
 import XCTest
-@testable import PlayerEngine
+@testable import AvatarService
 
-final class PlayerEngineTests: XCTestCase {
+final class AvatarServiceTests: XCTestCase {
 
     func test_heartRates_shouldReturn_mappedSkills() {
         let sut = createSUT()
@@ -29,10 +29,10 @@ final class PlayerEngineTests: XCTestCase {
         ]
         
         //when
-        sut.createPlayer(name: "Tomi")
+        sut.createAvatar(name: "Tomi")
         sut.update(skills: skills)
         sut.update(skills: skills)
-        let player = sut.getPlayer()
+        let player = sut.getAvatars()
         //then
         let playerPoints = player?.skills.map { $0.points }
         let expectedPoints = expectedSkills.map { $0.points }
@@ -40,13 +40,13 @@ final class PlayerEngineTests: XCTestCase {
     }
     func test_getPlayer_shouldReturn_Nil_ifnoPlayerCreated() {
         let sut = createSUT()
-        let player = sut.getPlayer()
+        let player = sut.getAvatars()
         XCTAssertNil(player)
     }
     func test_createPlayer_shouldReturnPlayer_withInitialValues() {
         let sut = createSUT()
-        sut.createPlayer(name: "Tomi")
-        let expectedPlayer = sut.getPlayer()
+        sut.createAvatar(name: "Tomi")
+        let expectedPlayer = sut.getAvatars()
         XCTAssertEqual(expectedPlayer?.age, 1)
         XCTAssertEqual(expectedPlayer?.name, "Tomi")
         XCTAssertEqual(expectedPlayer?.skills, [])
@@ -54,15 +54,15 @@ final class PlayerEngineTests: XCTestCase {
     
     func test_setAge_shouldUpdatePlayer_withAge() {
         let sut = createSUT()
-        let expectedPlayer = Player(name: "Tomi", age: 2)
-        sut.createPlayer(name: "Tomi")
+        let expectedPlayer = Avatar(name: "Tomi", age: 2)
+        sut.createAvatar(name: "Tomi")
         sut.update(age: 2)
-        let player = sut.getPlayer()
+        let player = sut.getAvatars()
         XCTAssertEqual(player?.age, expectedPlayer.age)
     }
     
-    private func createSUT() -> PlayerEngine {
-        let sut: PlayerEngine = PlayerEngineImpl()
+    private func createSUT() -> AvatarService {
+        let sut: AvatarService = PlayerEngineImpl()
         sut.setup(zones: [
             Zone(range: 0..<138, type: .zone1),
             Zone(range: 138..<159, type: .zone2),

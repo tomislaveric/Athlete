@@ -7,7 +7,7 @@
 
 import ComposableArchitecture
 import Foundation
-import PlayerEngine
+import AvatarService
 
 struct ProfileLogic: ReducerProtocol {
     struct State: Equatable {
@@ -16,6 +16,10 @@ struct ProfileLogic: ReducerProtocol {
         var activityList = ActivitiesLogic.State()
         var profile: Profile?
         var isLoading: Bool = true
+        
+        var connectionName: String? {
+            profile?.activeConnection?.type.rawValue
+        }
     }
     
     enum Action: Equatable {

@@ -25,7 +25,7 @@ struct ProfileView: View {
                 
                 StravaConnectorView(store: store.scope(state: \.stravaConnector, action: ProfileLogic.Action.stravaConnector))
                 
-                Text(viewStore.profile?.name ?? String(.placeholder))
+                Text(viewStore.connectionName ?? String(.placeholder))
                     .redacted(reason: viewStore.isLoading ? .placeholder : [])
                 
                 PlayerZonesView(store: store.scope(state: \.playerZones, action: ProfileLogic.Action.playerZones))
