@@ -1,5 +1,6 @@
 import Foundation
 import HTTPRequest
+import SharedModels
 
 public protocol AvatarService {
     typealias PlayerZoneType = ZoneType
@@ -37,7 +38,7 @@ public class AvatarServiceImpl: AvatarService {
     }
     
     public func getSkillsFor(heartRates: [Int], timeSample: Double) -> [Skill] {
-        return ZoneType.allCases.compactMap { zone in
+        return ZoneType.allCases.compactMap { zone in 
             Skill(points: getTimeSpent(in: zone, for: heartRates, timeSample: timeSample),
                   zoneType: zone)
         }

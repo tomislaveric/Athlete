@@ -7,7 +7,6 @@
 
 import Foundation
 import ComposableArchitecture
-import AvatarService
 
 extension DependencyValues {
     

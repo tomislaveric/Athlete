@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import AvatarService
+import SharedModels
 
 struct Profile: Equatable {
     var hrZones: [Zone]?

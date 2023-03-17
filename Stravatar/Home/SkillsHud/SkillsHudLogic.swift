@@ -6,8 +6,8 @@
 //
 
 import ComposableArchitecture
-import AvatarService
 import Foundation
+import SharedModels
 
 struct SkillsHudLogic: ReducerProtocol {
     struct State: Equatable {

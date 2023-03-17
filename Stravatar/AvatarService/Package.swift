@@ -32,6 +32,6 @@ let package = Package(
             dependencies: [
                 "AvatarService",
                 .product(name: "HTTPRequest", package: "http-request")
-            ]),
+            ])
     ]
 )

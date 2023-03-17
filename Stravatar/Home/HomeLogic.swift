@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 import ComposableArchitecture
-import AvatarService
 
 struct HomeLogic: ReducerProtocol {
     

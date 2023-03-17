@@ -9,8 +9,8 @@ import Foundation
 import ComposableArchitecture
 import StravaApi
 import KeychainStorage
-import AvatarService
 import OAuth
+import SharedModels
 
 public struct StravaUseCase {
     var isTokenAvailable: () throws -> Bool

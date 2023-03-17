@@ -5,8 +5,8 @@
 //  Created by Tomislav Eric on 17.02.23.
 //
 import ComposableArchitecture
-import AvatarService
 import Foundation
+import SharedModels
 
 struct PlayerZonesLogic: ReducerProtocol {
     struct State: Equatable {

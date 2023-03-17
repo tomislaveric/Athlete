@@ -7,7 +7,7 @@
 
 import Foundation
 import ComposableArchitecture
-import AvatarService
+import SharedModels
 
 struct AvatarLogic: ReducerProtocol {
     

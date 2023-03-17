@@ -7,7 +7,6 @@
 
 import ComposableArchitecture
 import Foundation
-import AvatarService
 
 struct ProfileLogic: ReducerProtocol {
     struct State: Equatable {
