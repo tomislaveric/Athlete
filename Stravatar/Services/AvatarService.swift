@@ -6,7 +6,7 @@ public protocol AvatarService {
     func setup(zones: [Zone])
     func getSkillsFor(heartRates: [Int], timeSample: Double) -> [Skill]
     
-    func getAvatars() async throws -> Avatar?
+    func getAvatars() async throws -> [Avatar]
     func createAvatar(name: String) async throws -> Avatar
     func update(id: UUID, skills: [Skill]) async throws -> Avatar
     func update(id: UUID, age: Int) async throws -> Avatar
@@ -15,24 +15,24 @@ public protocol AvatarService {
 
 public class AvatarServiceImpl: AvatarService {
     public func update(id: UUID, age: Int) async throws -> Avatar {
-        return try await httpRequest.put(url: getAvatarUrl(), header: nil, body: Avatar(id: id, age: age))
+        return try await httpRequest.put(url: avatarsUrl(), header: nil, body: Avatar(id: id, age: age))
     }
     
     public func update(id: UUID, name: String) async throws -> Avatar {
-        return try await httpRequest.put(url: getAvatarUrl(), header: nil, body: Avatar(id: id, name: name))
+        return try await httpRequest.put(url: avatarsUrl(), header: nil, body: Avatar(id: id, name: name))
     }
     
     public func update(id: UUID, skills: [Skill]) async throws -> Avatar {
-        return try await httpRequest.put(url: getAvatarUrl(), header: nil, body: Avatar(id: id, skills: skills))
+        return try await httpRequest.put(url: avatarsUrl(), header: nil, body: Avatar(id: id, skills: skills))
     }
     
     public func createAvatar(name: String) async throws -> Avatar {
         let player = Avatar(id: UUID(), name: name)
-        return try await httpRequest.post(url: getAvatarUrl(), header: nil, body: player)
+        return try await httpRequest.post(url: avatarsUrl(), header: nil, body: player)
     }
     
-    public func getAvatars() async throws -> Avatar? {
-        return try await httpRequest.get(url: getAvatarUrl(), header: nil)
+    public func getAvatars() async throws -> [Avatar] {
+        return try await httpRequest.get(url: avatarsUrl(), header: nil)
     }
     
     public func getSkillsFor(heartRates: [Int], timeSample: Double) -> [Skill] {
@@ -54,8 +54,8 @@ public class AvatarServiceImpl: AvatarService {
     private var baseURL: URL?
     private let httpRequest: HTTPRequest
     
-    private func getAvatarUrl() throws -> URL {
-        guard let baseURL, let url = URL(string: "\(baseURL)/avatar") else {
+    private func avatarsUrl() throws -> URL {
+        guard let baseURL, let url = URL(string: "\(baseURL)/avatars") else {
             throw PlayerEngineError.endpointURLWrong
         }
         return url

@@ -15,7 +15,8 @@ struct AvatarLogic: ReducerProtocol {
         var skillsHud: SkillsHudLogic.State
         var playerExists: Bool = false
         var enteredName: String = ""
-        var player: Avatar?
+        var avatars: [Avatar] = []
+        var currentAvatar: Avatar?
         var isButtonActive: Bool = false
         let minNameLength = 3
         var inEditMode: Bool = false
@@ -23,8 +24,8 @@ struct AvatarLogic: ReducerProtocol {
     
     enum Action: Equatable {
         case skillsHud(SkillsHudLogic.Action)
-        case handlePlayerResponse(TaskResult<Avatar?>)
-        case handlePlayerCreatedResponse(TaskResult<Avatar>)
+        case handleAvatarsResponse(TaskResult<[Avatar]>)
+        case handleAvatarResponse(TaskResult<Avatar>)
         case initialize
         case createPlayer
         case nameEntered(String)
@@ -46,14 +47,14 @@ struct AvatarLogic: ReducerProtocol {
             switch action {
             case .initialize:
                 return .task {
-                    await .handlePlayerResponse(TaskResult {
+                    await .handleAvatarsResponse(TaskResult {
                         try await avatarService.getAvatars()
                     })
                 }
             case .createPlayer:
                 let name = state.enteredName
                 return .task {
-                    await .handlePlayerCreatedResponse(TaskResult {
+                    await .handleAvatarResponse(TaskResult {
                         try await avatarService.createAvatar(name: name)
                     })
                 }
@@ -72,27 +73,27 @@ struct AvatarLogic: ReducerProtocol {
                 state.inEditMode = false
                 return .task { .updateName }
             case .updateName:
-                guard let id = state.player?.id else { return .none }
+                guard let id = state.avatars.first?.id else { return .none }
                 let name = state.enteredName
-                return .task { await .handlePlayerResponse(TaskResult {
+                return .task { await .handleAvatarResponse(TaskResult {
                     try await avatarService.update(id: id, name: name)
                 })}
             case .skillsHud:
                 return .none
-            case .handlePlayerResponse(.success(let player)):
-                state.player = player
+            case .handleAvatarsResponse(.success(let player)):
+                state.avatars = player
                 return .task { .updateHud }
-            case .handlePlayerCreatedResponse(.success(let player)):
-                dump(player)
-                state.player = player
+            case .handleAvatarResponse(.success(let avatar)):
+                dump(avatar)
+                state.currentAvatar = avatar
                 return .task { .playerCreated }
             case .updateHud:
-                let player = state.player
-                return .task { .skillsHud(.updateHud(player)) }
-            case .handlePlayerResponse(.failure(let error)):
+                let avatar = state.currentAvatar
+                return .task { .skillsHud(.updateHud(avatar)) }
+            case .handleAvatarsResponse(.failure(let error)):
                 dump(error)
                 return .none
-            case .handlePlayerCreatedResponse(.failure(let error)):
+            case .handleAvatarResponse(.failure(let error)):
                 dump(error)
                 return .none
             }

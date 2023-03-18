@@ -20,12 +20,16 @@ struct AvatarView: View {
     var body: some View {
         GroupBox {
             VStack(alignment: .leading) {
-                if let player = viewStore.player, let name = player.name, let age = player.age {
-                    avatarInfo(name: name, age: age)
-                    Divider()
-                    SkillsHudView(store: store.scope(state: \.skillsHud, action: AvatarLogic.Action.skillsHud))
-                } else {
+                if viewStore.avatars.isEmpty {
                     avatarCreationView
+                } else {
+                    ForEach(viewStore.avatars) { avatar in
+                        if let name = avatar.name, let age = avatar.age {
+                            avatarInfo(name: name, age: age)
+                            Divider()
+                            SkillsHudView(store: store.scope(state: \.skillsHud, action: AvatarLogic.Action.skillsHud))
+                        }
+                    }
                 }
             }
         }.task {
