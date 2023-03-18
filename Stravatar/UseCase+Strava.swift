@@ -81,7 +81,7 @@ extension StravaUseCase: DependencyKey {
         }
     )
     
-    private static func map(stravaSportType: String?) -> SportType {
+    private static func map(stravaSportType: String?) -> SharedModels.SportType {
         switch stravaSportType {
         case "Ride": return .bike
         case "Run": return .run
@@ -97,7 +97,7 @@ extension StravaUseCase: DependencyKey {
             return nil
         }
         
-        func getZoneType(by index: Int) throws -> AvatarService.PlayerZoneType {
+        func getZoneType(by index: Int) throws -> SharedModels.ZoneType {
             switch index {
             case 0: return .zone1
             case 1: return .zone2

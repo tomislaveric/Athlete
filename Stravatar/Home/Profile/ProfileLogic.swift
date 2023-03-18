@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import Foundation
+import SharedModels
 
 struct ProfileLogic: ReducerProtocol {
     struct State: Equatable {

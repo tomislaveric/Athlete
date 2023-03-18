@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import Foundation
+import SharedModels
 
 struct ActivityElementLogic: ReducerProtocol {
     struct State: Equatable, Identifiable {

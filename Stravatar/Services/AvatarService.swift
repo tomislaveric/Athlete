@@ -2,9 +2,7 @@ import Foundation
 import HTTPRequest
 import SharedModels
 
-public protocol AvatarService {
-    typealias PlayerZoneType = ZoneType
-    
+public protocol AvatarService {   
     func setup(zones: [Zone])
     func getSkillsFor(heartRates: [Int], timeSample: Double) -> [Skill]
     
