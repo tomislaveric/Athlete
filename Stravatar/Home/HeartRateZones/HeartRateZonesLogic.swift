@@ -8,7 +8,7 @@ import ComposableArchitecture
 import Foundation
 import SharedModels
 
-struct PlayerZonesLogic: ReducerProtocol {
+struct HeartRateZonesLogic: ReducerProtocol {
     struct State: Equatable {
         var hrZones: [Zone] = []
         var isLoading: Bool = true

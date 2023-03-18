@@ -12,7 +12,7 @@ import SharedModels
 struct ProfileLogic: ReducerProtocol {
     struct State: Equatable {
         var stravaConnector = StravaConnectorLogic.State()
-        var playerZones = PlayerZonesLogic.State()
+        var heartRateZones = HeartRateZonesLogic.State()
         var activityList = ActivitiesLogic.State()
         var profile: Profile?
         var isLoading: Bool = true
@@ -27,7 +27,7 @@ struct ProfileLogic: ReducerProtocol {
         case updateSkills
         case profileFetched(Profile)
         case stravaConnector(StravaConnectorLogic.Action)
-        case playerZones(PlayerZonesLogic.Action)
+        case heartRateZones(HeartRateZonesLogic.Action)
         case activityList(ActivitiesLogic.Action)
     }
     
@@ -35,8 +35,8 @@ struct ProfileLogic: ReducerProtocol {
         Scope(state: \.stravaConnector, action: /Action.stravaConnector) {
             StravaConnectorLogic()
         }
-        Scope(state: \.playerZones, action: /Action.playerZones) {
-            PlayerZonesLogic()
+        Scope(state: \.heartRateZones, action: /Action.heartRateZones) {
+            HeartRateZonesLogic()
         }
         Scope(state: \.activityList, action: /Action.activityList) {
             ActivitiesLogic()
@@ -53,13 +53,13 @@ struct ProfileLogic: ReducerProtocol {
                     return .task { .profileFetched(profile) }
                 case .zonesFetched(let zones):
                     state.profile?.hrZones = zones.filter { $0.type != .zone1 }
-                    return .task { .playerZones(.setHRzones(zones)) }
+                    return .task { .heartRateZones(.setHRzones(zones)) }
                 case .activitiesFetched(let activities):
                     state.profile?.activities = activities
                     return .task { .activityList(.setActivities(activities)) }
                 default: return .none
                 }
-            case .skillZonesTapped, .updateSkills, .playerZones, .activityList:
+            case .skillZonesTapped, .updateSkills, .heartRateZones, .activityList:
                 return .none
             }
         }

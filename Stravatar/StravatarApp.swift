@@ -13,9 +13,7 @@ struct StravatarApp: App {
     let store = Store(
         initialState: HomeLogic.State(
             profile: .init(),
-            avatar: .init(
-                skillsHud: .init()
-            )
+            avatars: .init()
         ),
         reducer: HomeLogic())
     var body: some Scene {

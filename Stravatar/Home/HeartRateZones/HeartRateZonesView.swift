@@ -9,11 +9,11 @@ import ComposableArchitecture
 import Foundation
 import SwiftUI
 
-struct PlayerZonesView: View {
+struct HeartRateZonesView: View {
     @ObservedObject
-    private var viewStore: ViewStoreOf<PlayerZonesLogic>
+    private var viewStore: ViewStoreOf<HeartRateZonesLogic>
     
-    init(store: StoreOf<PlayerZonesLogic>) {
+    init(store: StoreOf<HeartRateZonesLogic>) {
         self.viewStore = ViewStore(store)
     }
     

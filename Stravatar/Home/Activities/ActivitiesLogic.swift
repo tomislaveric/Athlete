@@ -28,7 +28,7 @@ struct ActivitiesLogic: ReducerProtocol {
     var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
-            case .activityElement(_, let action):
+            case .activityElement:
                 return .none
 //                switch action {
 //                case .selected(let activity):

@@ -28,7 +28,7 @@ struct ProfileView: View {
                 Text(viewStore.connectionName ?? String(.placeholder))
                     .redacted(reason: viewStore.isLoading ? .placeholder : [])
                 
-                PlayerZonesView(store: store.scope(state: \.playerZones, action: ProfileLogic.Action.playerZones))
+                HeartRateZonesView(store: store.scope(state: \.heartRateZones, action: ProfileLogic.Action.heartRateZones))
                 ActivitiesView(store: store.scope(state: \.activityList, action: ProfileLogic.Action.activityList))
             }
         }

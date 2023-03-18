@@ -11,20 +11,13 @@ import SharedModels
 
 struct SkillsHudLogic: ReducerProtocol {
     struct State: Equatable {
-        var playerSkills: [Skill] = []
+        var avatarSkills: [Skill] = []
     }
     
     enum Action: Equatable {
-        case updateHud(Avatar?)
     }
     
-    func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
-        switch action {
-        case .updateHud(let player):
-            guard let player, let skills = player.skills else { return .none }
-            state.playerSkills = skills
-                .filter { $0.zoneType != .zone1 }
-            return .none
-        }
+    var body: some ReducerProtocol<State, Action> {
+        EmptyReducer()
     }
 }

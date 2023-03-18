@@ -20,61 +20,21 @@ struct AvatarView: View {
     var body: some View {
         GroupBox {
             VStack(alignment: .leading) {
-                if viewStore.avatars.isEmpty {
-                    avatarCreationView
-                } else {
-                    ForEach(viewStore.avatars) { avatar in
-                        if let name = avatar.name, let age = avatar.age {
-                            avatarInfo(name: name, age: age)
-                            Divider()
-                            SkillsHudView(store: store.scope(state: \.skillsHud, action: AvatarLogic.Action.skillsHud))
-                        }
-                    }
+                if let avatar = viewStore.avatar, let id = avatar.id, let name = avatar.name, let age = avatar.age {
+                    avatarInfo(id: id, name: name, age: age)
+                    Divider()
+                    SkillsHudView(store: store.scope(state: \.skillsHud, action: AvatarLogic.Action.skillsHud))
                 }
             }
-        }.task {
-            viewStore.send(.initialize)
         }
     }
     
-    func avatarInfo(name: String, age: Int) -> some View {
+    func avatarInfo(id: UUID, name: String, age: Int) -> some View {
         VStack(alignment: .leading) {
             Text(String(.avatarInfoTitle))
                 .bold()
-           
-            if viewStore.inEditMode {
-                nameField(
-                    buttonTitle: String(.avatarInfoUpdateNameButton),
-                    action: { viewStore.send(.updateNameTapped) })
-            } else {
-                HStack {
-                    Text("\(String(.avatarInfoName)): \(name)")
-                    Button(String(.edit)) { viewStore.send(.editName) }
-                }
-            }
-            
+            Text("\(String(.avatarInfoName)): \(name)")
             Text("\(String(.avatarInfoAge)): \(age)")
-        }
-    }
-    
-    var avatarCreationView: some View {
-        VStack(alignment: .leading) {
-            Text(String(.avatarCreationNameInput))
-            nameField(
-                buttonTitle: String(.avatarCreationButtonTitle),
-                action: { viewStore.send(.saveNameTapped) })
-        }
-    }
-    
-    func nameField(buttonTitle: String, action: @escaping () -> Void) -> some View {
-        HStack {
-            TextField(String(.avatarCreationNameInputPlaceholder),
-                      text: viewStore.binding(
-                        get: { $0.enteredName },
-                        send: AvatarLogic.Action.nameEntered)
-            )
-            Button(buttonTitle, action: action)
-            .disabled(!viewStore.isButtonActive)
         }
     }
 }

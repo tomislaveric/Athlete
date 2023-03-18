@@ -8,27 +8,20 @@ public protocol AvatarService {
     
     func getAvatars() async throws -> [Avatar]
     func createAvatar(name: String) async throws -> Avatar
-    func update(id: UUID, skills: [Skill]) async throws -> Avatar
-    func update(id: UUID, age: Int) async throws -> Avatar
-    func update(id: UUID, name: String) async throws -> Avatar
+    func update(avatar: Avatar) async throws -> Avatar
 }
 
 public class AvatarServiceImpl: AvatarService {
-    public func update(id: UUID, age: Int) async throws -> Avatar {
-        return try await httpRequest.put(url: avatarsUrl(), header: nil, body: Avatar(id: id, age: age))
-    }
-    
-    public func update(id: UUID, name: String) async throws -> Avatar {
-        return try await httpRequest.put(url: avatarsUrl(), header: nil, body: Avatar(id: id, name: name))
-    }
-    
-    public func update(id: UUID, skills: [Skill]) async throws -> Avatar {
-        return try await httpRequest.put(url: avatarsUrl(), header: nil, body: Avatar(id: id, skills: skills))
+    public func update(avatar: Avatar) async throws -> Avatar {
+        guard let id = avatar.id else {
+            throw AvatarServiceError.updateFailed
+        }
+        return try await httpRequest.patch(url: updateAvatarUrl(id: id), header: nil, body: avatar)
     }
     
     public func createAvatar(name: String) async throws -> Avatar {
-        let player = Avatar(id: UUID(), name: name)
-        return try await httpRequest.post(url: avatarsUrl(), header: nil, body: player)
+        let player = Avatar(name: name)
+        return try await httpRequest.post(url: avatarUrl(), header: nil, body: player)
     }
     
     public func getAvatars() async throws -> [Avatar] {
@@ -56,7 +49,21 @@ public class AvatarServiceImpl: AvatarService {
     
     private func avatarsUrl() throws -> URL {
         guard let baseURL, let url = URL(string: "\(baseURL)/avatars") else {
-            throw PlayerEngineError.endpointURLWrong
+            throw AvatarServiceError.endpointURLWrong
+        }
+        return url
+    }
+    
+    private func updateAvatarUrl(id: UUID) throws -> URL {
+        guard let baseURL, let url = URL(string: "\(baseURL)/avatar/\(id)") else {
+            throw AvatarServiceError.endpointURLWrong
+        }
+        return url
+    }
+    
+    private func avatarUrl() throws -> URL {
+        guard let baseURL, let url = URL(string: "\(baseURL)/avatar") else {
+            throw AvatarServiceError.endpointURLWrong
         }
         return url
     }
@@ -83,7 +90,7 @@ public extension AvatarService {
     }
 }
 
-enum PlayerEngineError: Error {
+enum AvatarServiceError: Error {
     case updateFailed
     case endpointURLWrong
 }

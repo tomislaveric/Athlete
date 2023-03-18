@@ -13,13 +13,13 @@ struct HomeLogic: ReducerProtocol {
     
     struct State: Equatable {
         var profile: ProfileLogic.State
-        var avatar: AvatarLogic.State
+        var avatars: AvatarsLogic.State
         var text: String = ""
     }
     
     enum Action: Equatable {
         case profile(ProfileLogic.Action)
-        case avatar(AvatarLogic.Action)
+        case avatars(AvatarsLogic.Action)
         case onAppearance
     }
     
@@ -29,14 +29,14 @@ struct HomeLogic: ReducerProtocol {
         Scope(state: \.profile, action: /Action.profile) {
             ProfileLogic()
         }
-        Scope(state: \.avatar, action: /Action.avatar) {
-            AvatarLogic()
+        Scope(state: \.avatars, action: /Action.avatars) {
+            AvatarsLogic()
         }
         Reduce { state, action in
             switch action {
             case .onAppearance:
                 return .none
-            case .avatar, .profile:
+            case .avatars, .profile:
                 return .none
             }
         }
