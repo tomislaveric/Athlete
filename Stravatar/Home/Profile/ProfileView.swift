@@ -24,7 +24,6 @@ struct ProfileView: View {
             VStack(alignment: .leading) {
                 
                 StravaConnectorView(store: store.scope(state: \.stravaConnector, action: ProfileLogic.Action.stravaConnector))
-                
                 HeartRateZonesView(store: store.scope(state: \.heartRateZones, action: ProfileLogic.Action.heartRateZones))
                 ActivitiesView(store: store.scope(state: \.activityList, action: ProfileLogic.Action.activityList))
             }
