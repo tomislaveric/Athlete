@@ -26,6 +26,9 @@ struct StravaConnectorLogic: ReducerProtocol {
         case handleTokenCheckResponse(TaskResult<Bool>)
         
     }
+    
+    @Dependency(\.stravaApi) var stravaApi
+    
     var body: some ReducerProtocol<State, Action> {
         Reduce { state, action in
             switch action {
@@ -75,6 +78,4 @@ struct StravaConnectorLogic: ReducerProtocol {
             }
         }
     }
-    
-    @Dependency(\.stravaApi) var stravaApi
 }
