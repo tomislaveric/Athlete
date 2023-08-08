@@ -13,6 +13,7 @@ struct StravaConnectorLogic: ReducerProtocol {
     struct State: Equatable {
         let amountOfActivities: Int = 5
         var isLoading: Bool = true
+        var username: String = ""
     }
     enum Action: Equatable {
         case handleAthleteResponse(TaskResult<Profile>)
@@ -24,7 +25,6 @@ struct StravaConnectorLogic: ReducerProtocol {
         case handleHeartRateZonesResponse(TaskResult<[Zone]>)
         case handleActivitiesResponse(TaskResult<[Activity]>)
         case handleTokenCheckResponse(TaskResult<Bool>)
-        
     }
     
     @Dependency(\.stravaApi) var stravaApi
@@ -72,6 +72,7 @@ struct StravaConnectorLogic: ReducerProtocol {
             case .handleHeartRateZonesResponse(.success(let zones)):
                 return .task { .zonesFetched(zones) }
             case .handleAthleteResponse(.success(let profile)):
+                state.username = profile.name ?? ""
                 return .task { .stravaConnected(profile) }
             case .stravaConnected, .zonesFetched, .activitiesFetched, .handleHeartRateZonesResponse, .handleAthleteResponse, .handleActivitiesResponse, .handleTokenCheckResponse:
                 return .none

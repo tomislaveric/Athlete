@@ -19,6 +19,7 @@ struct StravaConnectorView: View {
         VStack {
             Text(String(.stravaProfileTitle))
                 .bold()
+            Text(viewStore.username)
             
             if !viewStore.isLoading {
                 Button(String(.stravaConnectButtonTitle)) {

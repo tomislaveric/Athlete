@@ -17,7 +17,7 @@ class ProfileServiceImpl: ProfileService {
     private let httpRequest: HTTPRequest
     private let baseURL: String
     
-    init(httpRequest: HTTPRequest = HTTPRequestImpl(), baseURL: String) {
+    init(httpRequest: HTTPRequest = HTTPRequestImpl(), baseURL: String = "") {
         self.httpRequest = httpRequest
         self.baseURL = baseURL
     }

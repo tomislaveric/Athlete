@@ -49,8 +49,7 @@ extension StravaUseCase: DependencyKey {
         getProfile: {
             let athlete = try await api.getDetailedAthlete()
             guard let id = athlete.id else { throw StravaError.idParsingFailed }
-            let connection = Connection(id: String(id), type: .strava)
-            return Profile(connections: [connection])
+            return Profile(name: athlete.firstname, creationDate: nil)
         },
         getActivities: { amount in
             let activities = try await api.getAthleteDetailedActivities(perPage: amount)
