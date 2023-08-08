@@ -19,7 +19,6 @@ struct HomeView: View {
     }
     
     var body: some View {
-       
         HStack{
             VStack(alignment: .leading) {
                 ProfileView(store: store.scope(state: \.profile, action: HomeLogic.Action.profile))
@@ -32,10 +31,14 @@ struct HomeView: View {
                 }
                 Spacer()
             }
-            
         }
         .onAppear {
             viewStore.send(.onAppearance)
+        }
+        .sheet(isPresented: viewStore.binding(get: \.shouldShowLogin, send: .loginActive)) {
+            VStack {
+                LoginView(store: store.scope(state: \.login, action: HomeLogic.Action.login))
+            }.padding(20)
         }
     }
 }
