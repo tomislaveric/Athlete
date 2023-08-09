@@ -68,7 +68,7 @@ struct HomeLogic: ReducerProtocol {
                     TaskResult { try await profileService.fetchUser() }
                 )}
             case .handleUserData(.failure(let error)):
-                if case ProfileServiceError.unauthorized = error {
+                if case UserServiceError.unauthorized = error {
                     state.shouldShowLogin = true
                 }
                 return .none

@@ -28,11 +28,11 @@ extension DependencyValues {
     }
     
     private enum ProfileServiceKey: DependencyKey {
-        typealias Value = ProfileService
-        static let liveValue: ProfileService = ProfileServiceImpl(baseURL: baseURL)
+        typealias Value = UserService
+        static let liveValue: UserService = UserServiceImpl(baseURL: baseURL)
     }
     
-    var profileService: ProfileService {
+    var profileService: UserService {
         get { self[ProfileServiceKey.self] }
         set { self[ProfileServiceKey.self] = newValue }
     }

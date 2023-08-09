@@ -9,12 +9,12 @@ import Foundation
 import SharedModels
 import HTTPRequest
 
-protocol ProfileService {
+protocol UserService {
     func create(profile: Profile) async throws -> Profile
     func fetchUser() async throws -> User
 }
 
-class ProfileServiceImpl: ProfileService {
+class UserServiceImpl: UserService {
     private let httpRequest: HTTPRequest
     private let baseURL: String
     
@@ -25,14 +25,14 @@ class ProfileServiceImpl: ProfileService {
     
     func create(profile: SharedModels.Profile) async throws -> SharedModels.Profile {
         guard let url = URL(string: "\(self.baseURL)/profile") else {
-            throw ProfileServiceError.badUrl
+            throw UserServiceError.badUrl
         }
         return try await httpRequest.post(url: url, header: nil, body: profile)
     }
     
     func fetchUser() async throws -> SharedModels.User {
         guard let url = URL(string: "\(self.baseURL)/user") else {
-            throw ProfileServiceError.badUrl
+            throw UserServiceError.badUrl
         }
         let user: User
         do {
@@ -43,21 +43,21 @@ class ProfileServiceImpl: ProfileService {
                 if let response = response as? HTTPURLResponse {
                     switch response.statusCode {
                     case 401:
-                        throw ProfileServiceError.unauthorized
+                        throw UserServiceError.unauthorized
                     default:
-                        throw ProfileServiceError.unmapped
+                        throw UserServiceError.unmapped(response)
                     }
                 }
             }
-            throw ProfileServiceError.unmapped
+            throw UserServiceError.unmapped(nil)
         }
         return user
     }
     
 }
 
-enum ProfileServiceError: Error {
+enum UserServiceError: Error {
     case badUrl
     case unauthorized
-    case unmapped
+    case unmapped(HTTPURLResponse?)
 }
