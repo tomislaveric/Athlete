@@ -12,6 +12,7 @@ import ComposableArchitecture
 struct StravatarApp: App {
     let store = Store(
         initialState: HomeLogic.State(
+            login: .init(),
             profile: .init(),
             avatars: .init()
         ),
